@@ -276,11 +276,95 @@ INSERT INTO HoaDonChiTiet (ID_SPCT, ID_HoaDon, SoLuong, DonGia) VALUES
 
 
 
-INSERT INTO Voucher (MaVoucher, Ten, MoTa, GiaTri, Loai, NgayBatDau, NgayKetThuc) VALUES
-('VC001', N'Giảm 10%', N'Giảm giá 10% ', 10, N'Phần trăm', '2025-03-01', '2025-03-31'),
-('VC002', N'Giảm 50k', N'Giảm 50k ', 50000, N'Số tiền', '2025-03-01', '2025-03-31'),
-('VC003', N'Giảm 20%', N'Giảm giá 20% ', 20, N'Phần trăm', '2025-03-01', '2025-03-31'),
-('VC004', N'Giảm 100k', N'Giảm 100k ', 100000, N'Số tiền', '2025-03-01', '2025-03-31'),
-('VC005', N'Flash Sale', N'Giảm 30% ', 30, N'Phần trăm', '2025-03-15', '2025-03-15');
-GO
+INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong, NgayBatDau, NgayKetThuc, SoTienGiam, TrangThai) VALUES
+-- Tháng 1/2025
+('PGG001', N'Ngày Đọc Sách Quốc Gia - Giảm 10K', 100, '2025-01-01', '2025-01-07', 10000, 0),  -- Hết hạn (trước 03/03/2025)
+('PGG002', N'Tuần lễ Sách Mới - Giảm 15K', 80, '2025-01-08', '2025-01-14', 15000, 0),  -- Hết hạn (trước 03/03/2025)
+('PGG003', N'Ngày Sách Đông - Giảm 20K', 60, '2025-01-15', '2025-01-21', 20000, 0),  -- Hết hạn (trước 03/03/2025)
+('PGG004', N'Chào Năm Mới - Giảm 25K', 50, '2025-01-22', '2025-01-28', 25000, 0),  -- Hết hạn (trước 03/03/2025)
+('PGG005', N'Ngày Sách Thiếu Nhi - Giảm 30K', 70, '2025-01-29', '2025-01-31', 30000, 0)  -- Hết hạn (trước 03/03/2025)
+
+
+
+
+--1. Tìm kiếm danh sách những sản phẩm trong hóa đơn (theo ID Hóa đơn)
+SELECT 
+    HD.ID AS ID_HoaDon,
+    SPCT.MaSPCT,
+    SP.Ten AS TenSanPham,
+    MS.Ten AS MauSac,
+    KT.Ten AS KichThuoc,
+    HDCT.SoLuong,
+    HDCT.DonGia
+FROM 
+    HoaDonChiTiet AS HDCT
+INNER JOIN SPChiTiet AS SPCT ON HDCT.ID_SPCT = SPCT.ID_SPCT
+INNER JOIN SanPham AS SP ON SPCT.ID_SanPham = SP.ID_SanPham
+INNER JOIN MauSac AS MS ON SPCT.ID_MauSac = MS.ID_MauSac
+INNER JOIN KichThuoc AS KT ON SPCT.ID_KichThuoc = KT.ID
+INNER JOIN HoaDon AS HD ON HDCT.ID_HoaDon = HD.ID
+WHERE 
+    HD.ID = <ID_HoaDon>; -- Thay <ID_HoaDon> bằng ID hóa đơn cần tìm
+
+
+
+
+	--2. Tìm kiếm những sản phẩm chi tiết theo sản phẩm
+
+	SELECT 
+    SP.Ma AS MaSanPham,
+    SP.Ten AS TenSanPham,
+    MS.Ten AS MauSac,
+    KT.Ten AS KichThuoc,
+    SPCT.SoLuong,
+    SPCT.DonGia
+FROM 
+    SPChiTiet AS SPCT
+INNER JOIN SanPham AS SP ON SPCT.ID_SanPham = SP.ID_SanPham
+INNER JOIN MauSac AS MS ON SPCT.ID_MauSac = MS.ID_MauSac
+INNER JOIN KichThuoc AS KT ON SPCT.ID_KichThuoc = KT.ID
+WHERE 
+    SP.ID_SanPham = <ID_SanPham>; -- Thay <ID_SanPham> bằng ID sản phẩm cần tìm
+
+
+
+
+	--Những câu lệnh cần sử dụng khi users mua 1 món hàng
+
+-- Bắt đầu transaction
+BEGIN TRANSACTION;
+
+-- Thêm một hóa đơn mới
+INSERT INTO HoaDon (ID_KhachHang, ID_NhanVien, ID_PhieuGiamGia, NgayMuaHang) 
+VALUES (1, 7,1, GETDATE());
+
+-- Lấy ID hóa đơn mới tạo
+DECLARE @ID_HoaDon INT = SCOPE_IDENTITY();
+
+-- Thêm sản phẩm vào hóa đơn
+INSERT INTO HoaDonChiTiet (ID_SPCT, ID_HoaDon, SoLuong, DonGia) 
+VALUES (1, 13, 2, 1500000);
+
+-- Cập nhật số lượng tồn kho
+UPDATE SPChiTiet
+SET SoLuong = SoLuong - 2
+WHERE ID_SPCT = 1 AND SoLuong >= 2;
+
+-- Kiểm tra xem có giảm được số lượng không
+IF @@ROWCOUNT = 0
+BEGIN
+    PRINT 'Không đủ số lượng sản phẩm trong kho!';
+    ROLLBACK TRANSACTION; -- Hủy bỏ toàn bộ giao dịch nếu lỗi
+    RETURN;
+END;
+
+-- Hoàn tất transaction
+COMMIT TRANSACTION;
+
+select * from HoaDon
+
+SELECT * FROM PhieuGiamGia;
+
+
+
 
