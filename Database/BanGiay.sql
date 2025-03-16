@@ -360,11 +360,9 @@ END;
 
 -- Hoàn tất transaction
 COMMIT TRANSACTION;
-
-select * from HoaDon
-
-SELECT * FROM PhieuGiamGia;
-
-
+SELECT       HoaDon.*, BangThanhToan.*, HoaDonChiTiet.*
+FROM            BangThanhToan INNER JOIN
+                         HoaDon ON BangThanhToan.ID_HoaDon = HoaDon.ID INNER JOIN
+                         HoaDonChiTiet ON HoaDon.ID = HoaDonChiTiet.ID_HoaDon
 
 
