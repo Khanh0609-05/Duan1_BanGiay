@@ -92,16 +92,18 @@ CREATE TABLE PhieuGiamGia (
 );
 GO
 
--- Bảng HoaDon
+-- Bảng HoaDon 
 CREATE TABLE HoaDon (
     ID INT PRIMARY KEY IDENTITY,
+    MaHoaDon NVARCHAR(50) UNIQUE NOT NULL, -- Mã hóa đơn
     ID_KhachHang INT NOT NULL FOREIGN KEY REFERENCES KhachHang(ID) ON DELETE CASCADE ON UPDATE CASCADE,
     ID_NhanVien INT NOT NULL FOREIGN KEY REFERENCES NhanVien(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-	ID_PhieuGiamGia INT FOREIGN KEY REFERENCES PhieuGiamGia(ID)ON DELETE CASCADE ON UPDATE CASCADE,
+    ID_PhieuGiamGia INT FOREIGN KEY REFERENCES PhieuGiamGia(ID) ON DELETE CASCADE ON UPDATE CASCADE,
     NgayMuaHang DATETIME NOT NULL DEFAULT GETDATE(),
     TrangThai BIT DEFAULT 1
 );
 GO
+
 
 -- Bảng BangThanhToan
 CREATE TABLE BangThanhToan (
@@ -234,19 +236,19 @@ INSERT INTO NhanVien (Ten, MaNV, TenDangNhap, MatKhau) VALUES
 GO
 
 
-INSERT INTO HoaDon (ID_KhachHang, ID_NhanVien) VALUES 
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10);
-
+INSERT INTO HoaDon (MaHoaDon, ID_KhachHang, ID_NhanVien) VALUES 
+('HD202403001', 1, 1),
+('HD202403002', 2, 2),
+('HD202403003', 3, 3),
+('HD202403004', 4, 4),
+('HD202403005', 5, 5),
+('HD202403006', 6, 6),
+('HD202403007', 7, 7),
+('HD202403008', 8, 8),
+('HD202403009', 9, 9),
+('HD202403010', 10, 10);
 GO
+
 
 INSERT INTO BangThanhToan (ID_HoaDon, PhuongThuc) VALUES 
 (1, N'Tiền mặt'),
@@ -274,7 +276,7 @@ INSERT INTO HoaDonChiTiet (ID_SPCT, ID_HoaDon, SoLuong, DonGia) VALUES
 (9, 9, 1, 1800000),
 (10, 10, 3, 2500000);
 
-
+GO
 
 INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong, NgayBatDau, NgayKetThuc, SoTienGiam, TrangThai) VALUES
 -- Tháng 1/2025
@@ -360,9 +362,24 @@ END;
 
 -- Hoàn tất transaction
 COMMIT TRANSACTION;
-SELECT       HoaDon.*, BangThanhToan.*, HoaDonChiTiet.*
-FROM            BangThanhToan INNER JOIN
-                         HoaDon ON BangThanhToan.ID_HoaDon = HoaDon.ID INNER JOIN
-                         HoaDonChiTiet ON HoaDon.ID = HoaDonChiTiet.ID_HoaDon
+
+select * from HoaDon
+
+SELECT * FROM PhieuGiamGia;
 
 
+
+
+
+
+SELECT * FROM ThuongHieu;
+SELECT * FROM SanPham;
+SELECT * FROM MauSac;
+SELECT * FROM KichThuoc;
+SELECT * FROM SPChiTiet;
+SELECT * FROM KhachHang;
+SELECT * FROM NhanVien;
+SELECT * FROM PhieuGiamGia;
+SELECT * FROM HoaDon;
+SELECT * FROM BangThanhToan;
+SELECT * FROM HoaDonChiTiet;
