@@ -1,8 +1,10 @@
+package SanPham;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DBconnect;
+
 
 
 
@@ -22,7 +24,7 @@ public class DBconnect {//kết nối với SQL server
     private static final String PASSWORD = "123";
     private static final String SERVER = "localhost";
     private static final String PORT = "1433";
-    private static final String DATABASE_NAME = "data";
+    private static final String DATABASE_NAME = "BanGiay3";
     private static final boolean USING_SSL = true;
    
     private static String CONNECT_STRING;
