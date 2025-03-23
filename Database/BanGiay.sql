@@ -1,6 +1,6 @@
-﻿CREATE DATABASE BanHangTaiQuay4
+﻿CREATE DATABASE BanHangTaiQuay
 GO
-USE BanHangTaiQuay4
+USE BanHangTaiQuay
 GO
 
 
@@ -33,6 +33,7 @@ GO
 CREATE TABLE KhachHang (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     TenKhachHang NVARCHAR(255),
+	DiaChi NVARCHAR(255),
     SDT NVARCHAR(15),
     GioiTinh NVARCHAR(10),
     NgaySinh DATETIME
@@ -94,6 +95,9 @@ CREATE TABLE PhieuGiamGia (
     MaPhieuGiamGia NVARCHAR(50) NOT NULL UNIQUE,
     TenPhieuGiamGia NVARCHAR(255),
     SoLuong INT DEFAULT 0 CHECK (SoLuong >= 0),
+	kieuGiam CHAR(3) CHECK (kieuGiam IN ('VND', '%')) NOT NULL,
+    mucGiam DECIMAL(10,2) NOT NULL,
+    hoaDonToiThieu DECIMAL(10,2) NOT NULL ,
     NgayBatDau DATETIME NOT NULL,
     NgayKetThuc DATETIME NOT NULL,
     TrangThai BIT DEFAULT 1 CHECK (TrangThai IN (0,1)),
@@ -132,41 +136,42 @@ GO
 -- 1. ChucVu (Chức vụ)
 INSERT INTO ChucVu (MaChucVu, TenChucVu) VALUES
 ('CV001', N'Quản lý'),
-('CV002', N'Nhân viên bán hàng'),
-('CV003', N'Nhân viên kho'),
-('CV004', N'Kế toán'),
-('CV005', N'Trưởng phòng'),
-('CV006', N'Nhân viên marketing'),
-('CV007', N'Nhân viên IT'),
-('CV008', N'Chăm sóc khách hàng'),
-('CV009', N'Nhân viên bảo vệ'),
-('CV010', N'Nhân viên vệ sinh');
+('CV002', N'Nhân viên '),
+('CV003', N'Nhân viên'),
+('CV004', N'Nhân viên'),
+('CV005', N'Quản lý'),
+('CV006', N'Nhân viên'),
+('CV007', N'Nhân viên'),
+('CV008', N'Nhân viên'),
+('CV009', N'Nhân viên'),
+('CV010', N'Nhân viên');
 
 -- 2. NhanVien (Nhân viên)
 INSERT INTO NhanVien (MaNhanVien, TenNhanVien, NgaySinh, SDT, GioiTinh, QueQuan, MatKhau, TrangThai, IDChucVu) VALUES
-('NV001', N'Nguyễn Văn A', '1990-01-15', '0987654321', N'Nam', N'Hà Nội', N'123456', 1, 1),
-('NV002', N'Trần Thị B', '1992-02-20', '0912345678', N'Nữ', N'Hồ Chí Minh', N'abcdef', 1, 2),
-('NV003', N'Lê Văn C', '1988-03-25', '0934567890', N'Nam', N'Đà Nẵng', N'qwerty', 1, 3),
-('NV004', N'Phạm Thị D', '1995-04-10', '0967890123', N'Nữ', N'Hải Phòng', N'123abc', 1, 4),
-('NV005', N'Hoàng Văn E', '1986-05-05', '0945678901', N'Nam', N'Cần Thơ', N'pass123', 1, 5),
-('NV006', N'Võ Thị F', '1993-06-30', '0978901234', N'Nữ', N'Nghệ An', N'789xyz', 1, 6),
-('NV007', N'Hồ Văn G', '1987-07-15', '0911122233', N'Nam', N'Huế', N'456pass', 1, 7),
-('NV008', N'Đinh Thị H', '1991-08-25', '0922233445', N'Nữ', N'Hà Nam', N'abc123', 1, 8),
-('NV009', N'Ngô Văn I', '1994-09-10', '0933344556', N'Nam', N'Lào Cai', N'pass789', 1, 9),
-('NV010', N'Bùi Thị K', '1989-10-20', '0944455667', N'Nữ', N'Bắc Ninh', N'xyz456', 1, 10);
+('NV001', N'Nguyễn Văn An', '1990-01-15', '0987654321', N'Nam', N'Hà Nội', N'123456', 1, 1),
+('NV002', N'Trần Thị Ba', '1992-02-20', '0912345678', N'Nữ', N'Hồ Chí Minh', N'abcdef', 1, 2),
+('NV003', N'Lê Văn Luyện', '1988-03-25', '0934567890', N'Nam', N'Đà Nẵng', N'qwerty', 1, 3),
+('NV004', N'Phạm Thị Dương', '1995-04-10', '0967890123', N'Nữ', N'Hải Phòng', N'123abc', 1, 4),
+('NV005', N'Hoàng Văn Toàn', '1986-05-05', '0945678901', N'Nam', N'Cần Thơ', N'pass123', 1, 5),
+('NV006', N'Võ Thị Sáu', '1993-06-30', '0978901234', N'Nữ', N'Nghệ An', N'789xyz', 1, 6),
+('NV007', N'Hồ Văn Giang', '1987-07-15', '0911122233', N'Nam', N'Huế', N'456pass', 1, 7),
+('NV008', N'Đinh Thị Hoa', '1991-08-25', '0922233445', N'Nữ', N'Hà Nam', N'abc123', 1, 8),
+('NV009', N'Ngô Văn Tín', '1994-09-10', '0933344556', N'Nam', N'Lào Cai', N'pass789', 1, 9),
+('NV010', N'Bùi Thị Mai', '1989-10-20', '0944455667', N'Nữ', N'Bắc Ninh', N'xyz456', 1, 10);
 
 -- 3. KhachHang (Khách hàng)
-INSERT INTO KhachHang (TenKhachHang, SDT, GioiTinh, NgaySinh) VALUES
-(N'Nguyễn Minh Anh', '0912345678', N'Nữ', '1995-05-15'),
-(N'Trần Quang Huy', '0987654321', N'Nam', '1990-10-20'),
-(N'Lê Thị Mai', '0945678901', N'Nữ', '1985-03-25'),
-(N'Phạm Văn Hoàng', '0978901234', N'Nam', '1987-07-10'),
-(N'Hoàng Thị Lan', '0922233445', N'Nữ', '1993-12-30'),
-(N'Vũ Văn Khôi', '0931122334', N'Nam', '1992-06-15'),
-(N'Đặng Thị Hồng', '0964455667', N'Nữ', '1994-09-05'),
-(N'Phan Văn Dũng', '0915566778', N'Nam', '1989-08-20'),
-(N'Bùi Thị Yến', '0943344556', N'Nữ', '1990-11-25'),
-(N'Lê Văn Hải', '0972233445', N'Nam', '1995-01-10');
+INSERT INTO KhachHang (TenKhachHang, DiaChi, SDT, GioiTinh, NgaySinh)
+VALUES
+(N'Nguyễn Văn An', N'123 Đường Lê Lợi, Quận 1, TP.HCM', '0987654321', N'Nam', '1995-06-15'),
+(N'Trần Thị Bích', N'456 Đường Hai Bà Trưng, Quận 3, TP.HCM', '0978123456', N'Nữ', '1998-09-22'),
+(N'Lê Hữu Minh', N'789 Đường Nguyễn Huệ, Quận 1, TP.HCM', '0965111222', N'Nam', '1992-03-10'),
+(N'Phạm Hồng Nhung', N'321 Đường Lý Tự Trọng, Quận 5, TP.HCM', '0902333444', N'Nữ', '2000-07-18'),
+(N'Hoàng Văn Tuấn', N'654 Đường Nguyễn Trãi, Quận 10, TP.HCM', '0911444555', N'Nam', '1988-12-05'),
+(N'Bùi Thanh Tâm', N'987 Đường Cách Mạng Tháng 8, Quận 3, TP.HCM', '0922666777', N'Nam', '1997-05-20'),
+(N'Đỗ Mỹ Linh', N'159 Đường Phạm Ngũ Lão, Quận 1, TP.HCM', '0933555666', N'Nữ', '1994-10-08'),
+(N'Võ Thị Lan', N'753 Đường Trần Phú, Quận 7, TP.HCM', '0944666888', N'Nữ', '1999-02-28'),
+(N'Ngô Quang Dũng', N'258 Đường Nguyễn Văn Cừ, Quận 5, TP.HCM', '0955777999', N'Nam', '1990-11-30'),
+(N'Phan Hải Nam', N'357 Đường Hoàng Văn Thụ, Quận Phú Nhuận, TP.HCM', '0966888111', N'Nam', '1985-08-25');
 
 -- 4. ThuongHieu (Thương hiệu)
 INSERT INTO ThuongHieu (MaTH, TenTH, TrangThai) VALUES
@@ -208,17 +213,18 @@ INSERT INTO KichThuoc (MaKT, TenKT, TrangThai) VALUES
 ('KT010', N'45', 1);
 
 -- 7. PhieuGiamGia (Phiếu giảm giá)
-INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong, NgayBatDau, NgayKetThuc, TrangThai) VALUES
-('PGG001', N'Giảm 40%', 20, '2025-04-05', '2025-05-05', 1),
-('PGG002', N'Giảm 35%', 25, '2025-04-10', '2025-05-10', 1),
-('PGG003', N'Giảm 15%', 80, '2025-03-10', '2025-04-10', 1),
-('PGG004', N'Giảm 30%', 30, '2025-03-15', '2025-04-15', 1),
-('PGG005', N'Giảm 25%', 60, '2025-03-20', '2025-04-20', 1),
-('PGG006', N'Giảm 5%', 150, '2025-03-25', '2025-04-25', 1),
-('PGG007', N'Giảm 50%', 10, '2025-04-01', '2025-05-01', 1),
-('PGG008', N'Giảm 40%', 20, '2025-04-05', '2025-05-05', 1),
-('PGG009', N'Giảm 35%', 25, '2025-04-10', '2025-05-10', 1),
-('PGG010', N'Giảm 20%', 70, '2025-04-15', '2025-05-15', 1);
+INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong, kieuGiam, mucGiam, hoaDonToiThieu, NgayBatDau, NgayKetThuc, TrangThai)
+VALUES
+('PGG001', 'Giảm 50K cho đơn từ 500K', 100, 'VND', 50000, 500000, '2025-04-01', '2025-04-30', 1),
+('PGG002', 'Giảm 10% tối đa 100K', 200, '%', 10, 500000, '2025-04-01', '2025-04-30', 1),
+('PGG003', 'Giảm 30K cho đơn từ 300K', 150, 'VND', 30000, 300000, '2025-03-25', '2025-04-15', 1),
+('PGG004', 'Giảm 20% tối đa 200K', 100, '%', 20, 1000000, '2025-04-05', '2025-04-25', 1),
+('PGG005', 'Flash Sale - Giảm 70K', 50, 'VND', 70000, 700000, '2025-03-28', '2025-04-02', 1),
+('PGG006', 'Giảm 15% tối đa 150K', 120, '%', 15, 750000, '2025-04-10', '2025-04-30', 1),
+('PGG007', 'Khuyến mãi sinh nhật - 100K', 80, 'VND', 100000, 1000000, '2025-04-01', '2025-04-07', 1),
+('PGG008', 'Mua nhiều giảm nhiều - 25%', 60, '%', 25, 2000000, '2025-04-15', '2025-05-01', 1),
+('PGG009', 'Giảm 5% cho đơn từ 300K', 90, '%', 5, 300000, '2025-04-01', '2025-04-20', 1),
+('PGG010', 'Voucher tháng 4 - 40K', 110, 'VND', 40000, 400000, '2025-04-01', '2025-04-30', 1);
 
 -- 8. ChiTietSanPham
 INSERT INTO ChiTietSanPham (IDThuongHieu, IDMauSac, IDKichThuoc, SoLuong, DonGia, TrangThai) VALUES
@@ -288,5 +294,6 @@ SELECT * FROM HoaDon;
 SELECT * FROM ChiTietHoaDon;
 SELECT * FROM KhachHang;
 SELECT * FROM NhanVien;
+
 
 
