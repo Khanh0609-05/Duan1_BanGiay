@@ -32,6 +32,7 @@ GO
 -- 3. KhachHang
 CREATE TABLE KhachHang (
     ID INT IDENTITY(1,1) PRIMARY KEY,
+	MaKhachHang NVARCHAR(50) NOT NULL UNIQUE,
     TenKhachHang NVARCHAR(255),
 	DiaChi NVARCHAR(255),
     SDT NVARCHAR(15),
@@ -111,6 +112,7 @@ CREATE TABLE HoaDon (
     IDNhanVien INT FOREIGN KEY REFERENCES NhanVien(ID),
     IDKhachHang INT FOREIGN KEY REFERENCES KhachHang(ID),
     IDPhieuGiamGia INT FOREIGN KEY REFERENCES PhieuGiamGia(ID),
+	MaHoaDon NVARCHAR(50) NOT NULL UNIQUE,
     TongTien DECIMAL(10, 2) CHECK (TongTien > 0),
     GiamGia DECIMAL(10, 2) CHECK (GiamGia >= 0),
     NgayTao DATETIME DEFAULT GETDATE(),
@@ -118,6 +120,8 @@ CREATE TABLE HoaDon (
     TrangThai BIT DEFAULT 1 CHECK (TrangThai IN (0,1))
 );
 GO
+
+
 
 -- 11. ChiTietHoaDon
 CREATE TABLE ChiTietHoaDon (
@@ -160,18 +164,19 @@ INSERT INTO NhanVien (MaNhanVien, TenNhanVien, NgaySinh, SDT, GioiTinh, QueQuan,
 ('NV010', N'Bùi Thị Mai', '1989-10-20', '0944455667', N'Nữ', N'Bắc Ninh', N'xyz456', 1, 10);
 
 -- 3. KhachHang (Khách hàng)
-INSERT INTO KhachHang (TenKhachHang, DiaChi, SDT, GioiTinh, NgaySinh)
+INSERT INTO KhachHang (MaKhachHang,TenKhachHang, DiaChi, SDT, GioiTinh, NgaySinh)
 VALUES
-(N'Nguyễn Văn An', N'123 Đường Lê Lợi, Quận 1, TP.HCM', '0987654321', N'Nam', '1995-06-15'),
-(N'Trần Thị Bích', N'456 Đường Hai Bà Trưng, Quận 3, TP.HCM', '0978123456', N'Nữ', '1998-09-22'),
-(N'Lê Hữu Minh', N'789 Đường Nguyễn Huệ, Quận 1, TP.HCM', '0965111222', N'Nam', '1992-03-10'),
-(N'Phạm Hồng Nhung', N'321 Đường Lý Tự Trọng, Quận 5, TP.HCM', '0902333444', N'Nữ', '2000-07-18'),
-(N'Hoàng Văn Tuấn', N'654 Đường Nguyễn Trãi, Quận 10, TP.HCM', '0911444555', N'Nam', '1988-12-05'),
-(N'Bùi Thanh Tâm', N'987 Đường Cách Mạng Tháng 8, Quận 3, TP.HCM', '0922666777', N'Nam', '1997-05-20'),
-(N'Đỗ Mỹ Linh', N'159 Đường Phạm Ngũ Lão, Quận 1, TP.HCM', '0933555666', N'Nữ', '1994-10-08'),
-(N'Võ Thị Lan', N'753 Đường Trần Phú, Quận 7, TP.HCM', '0944666888', N'Nữ', '1999-02-28'),
-(N'Ngô Quang Dũng', N'258 Đường Nguyễn Văn Cừ, Quận 5, TP.HCM', '0955777999', N'Nam', '1990-11-30'),
-(N'Phan Hải Nam', N'357 Đường Hoàng Văn Thụ, Quận Phú Nhuận, TP.HCM', '0966888111', N'Nam', '1985-08-25');
+('KH001',N'Nguyễn Văn An', N'123 Đường Lê Lợi, Quận 1, TP.HCM', '0987654321', N'Nam', '1995-06-15'),
+('KH002',N'Trần Thị Bích', N'456 Đường Hai Bà Trưng, Quận 3, TP.HCM', '0978123456', N'Nữ', '1998-09-22'),
+('KH003',N'Lê Hữu Minh', N'789 Đường Nguyễn Huệ, Quận 1, TP.HCM', '0965111222', N'Nam', '1992-03-10'),
+('KH005',N'Phạm Hồng Nhung', N'321 Đường Lý Tự Trọng, Quận 5, TP.HCM', '0902333444', N'Nữ', '2000-07-18'),
+('KH006',N'Hoàng Văn Tuấn', N'654 Đường Nguyễn Trãi, Quận 10, TP.HCM', '0911444555', N'Nam', '1988-12-05'),
+('KH007',N'Bùi Thanh Tâm', N'987 Đường Cách Mạng Tháng 8, Quận 3, TP.HCM', '0922666777', N'Nam', '1997-05-20'),
+('KH008',N'Đỗ Mỹ Linh', N'159 Đường Phạm Ngũ Lão, Quận 1, TP.HCM', '0933555666', N'Nữ', '1994-10-08'),
+('KH009',N'Võ Thị Lan', N'753 Đường Trần Phú, Quận 7, TP.HCM', '0944666888', N'Nữ', '1999-02-28'),
+('KH010',N'Ngô Quang Dũng', N'258 Đường Nguyễn Văn Cừ, Quận 5, TP.HCM', '0955777999', N'Nam', '1990-11-30'),
+('KH011',N'Phan Hải Nam', N'357 Đường Hoàng Văn Thụ, Quận Phú Nhuận, TP.HCM', '0966888111', N'Nam', '1985-08-25');
+
 
 -- 4. ThuongHieu (Thương hiệu)
 INSERT INTO ThuongHieu (MaTH, TenTH, TrangThai) VALUES
@@ -253,17 +258,17 @@ INSERT INTO SanPham (MaSanPham, TenSanPham, HinhAnh, IDChiTietSanPham) VALUES
 ('SP010', N'Skechers D-Lite', N'skechers_dlite.jpg', 10);
 
 -- 10. HoaDon
-INSERT INTO HoaDon (IDNhanVien, IDKhachHang, IDPhieuGiamGia, TongTien, GiamGia, NgayTao, ThanhTien, TrangThai) VALUES
-(1, 1, 1, 1700000, 85000, '2025-03-06', 1615000, 1),
-(2, 2, 2, 2900000, 1450000, '2025-03-07', 1450000, 1),
-(3, 3, 3, 2500000, 375000, '2025-03-03', 2125000, 1),
-(4, 4, 4, 1800000, 540000, '2025-03-04', 1260000, 1),
-(5, 5, 5, 2200000, 550000, '2025-03-05', 1650000, 1),
-(6, 6, 6, 1700000, 85000, '2025-03-06', 1615000, 1),
-(7, 7, 7, 2900000, 1450000, '2025-03-07', 1450000, 1),
-(8, 8, 8, 3200000, 1280000, '2025-03-08', 1920000, 1),
-(9, 9, 9, 2400000, 840000, '2025-03-09', 1560000, 1),
-(10, 10, 10, 2000000, 400000, '2025-03-10', 1600000, 1);
+INSERT INTO HoaDon (IDNhanVien, IDKhachHang, IDPhieuGiamGia,MaHoaDon, TongTien, GiamGia, NgayTao, ThanhTien, TrangThai) VALUES
+(1, 1, 1,'HD001', 1700000, 85000, '2025-03-06', 1615000, 1),
+(2, 2, 2,'HD002', 2900000, 1450000, '2025-03-07', 1450000, 1),
+(3, 3, 3,'HD003', 2500000, 375000, '2025-03-03', 2125000, 1),
+(4, 4, 4,'HD004', 1800000, 540000, '2025-03-04', 1260000, 1),
+(5, 5, 5,'HD005', 2200000, 550000, '2025-03-05', 1650000, 1),
+(6, 6, 6,'HD006', 1700000, 85000, '2025-03-06', 1615000, 1),
+(7, 7, 7,'HD007', 2900000, 1450000, '2025-03-07', 1450000, 1),
+(8, 8, 8,'HD008', 3200000, 1280000, '2025-03-08', 1920000, 1),
+(9, 9, 9,'HD009', 2400000, 840000, '2025-03-09', 1560000, 1),
+(10, 10, 10,'HD010', 2000000, 400000, '2025-03-10', 1600000, 1);
 
 -- 11. ChiTietHoaDon
 INSERT INTO ChiTietHoaDon (IDSanPham, IDHoaDon, SoLuong, DonGia, TrangThai) VALUES
