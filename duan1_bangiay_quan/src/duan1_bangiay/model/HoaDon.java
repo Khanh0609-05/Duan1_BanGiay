@@ -9,19 +9,19 @@ package duan1_bangiay.model;
  * @author Vinh
  */
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class HoaDon {
 
     private String maHoaDon; // Mã hóa đơn
     private String tenKhachHang; // Tên khách hàng
     private String tenNhanVien; // Tên nhân viên
-    private Date ngayTao; // Ngày tạo
+    private LocalDateTime ngayTao; // Ngày tạo
     private BigDecimal thanhTien; // Thành tiền
     private boolean trangThai; // Trạng thái (đã thanh toán/chưa thanh toán)
 
     // Constructor
-    public HoaDon(String maHoaDon, String tenKhachHang, String tenNhanVien, Date ngayTao, BigDecimal thanhTien, boolean trangThai) {
+    public HoaDon(String maHoaDon, String tenKhachHang, String tenNhanVien, LocalDateTime ngayTao, BigDecimal thanhTien, boolean trangThai) {
         this.maHoaDon = maHoaDon;
         this.tenKhachHang = tenKhachHang;
         this.tenNhanVien = tenNhanVien;
@@ -59,11 +59,11 @@ public class HoaDon {
         this.tenNhanVien = tenNhanVien;
     }
 
-    public Date getNgayTao() {
+    public LocalDateTime getNgayTao() {
         return ngayTao;
     }
 
-    public void setNgayTao(Date ngayTao) {
+    public void setNgayTao(LocalDateTime ngayTao) {
         this.ngayTao = ngayTao;
     }
 

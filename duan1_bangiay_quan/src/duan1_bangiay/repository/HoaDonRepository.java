@@ -31,7 +31,7 @@ public class HoaDonRepository {
                 hoaDon.setMaHoaDon(resultSet.getString("ID"));
                 hoaDon.setTenKhachHang(resultSet.getString("TenKhachHang"));
                 hoaDon.setTenNhanVien(resultSet.getString("TenNhanVien"));
-                hoaDon.setNgayTao(resultSet.getTimestamp("NgayTao"));
+                hoaDon.setNgayTao(resultSet.getTimestamp("NgayTao").toLocalDateTime());
                 hoaDon.setThanhTien(resultSet.getBigDecimal("ThanhTien"));
                 hoaDon.setTrangThai(resultSet.getBoolean("TrangThai"));
 
@@ -58,7 +58,7 @@ public class HoaDonRepository {
                 hoaDon.setMaHoaDon(resultSet.getString("ID"));
                 hoaDon.setTenKhachHang(resultSet.getString("TenKhachHang"));
                 hoaDon.setTenNhanVien(resultSet.getString("TenNhanVien"));
-                hoaDon.setNgayTao(resultSet.getTimestamp("NgayTao"));
+                hoaDon.setNgayTao(resultSet.getTimestamp("NgayTao").toLocalDateTime());
                 hoaDon.setThanhTien(resultSet.getBigDecimal("ThanhTien"));
                 hoaDon.setTrangThai(resultSet.getBoolean("TrangThai"));
 
