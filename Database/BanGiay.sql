@@ -32,7 +32,7 @@ GO
 CREATE TABLE KhachHang (
     ID INT IDENTITY(1,1) PRIMARY KEY,
 	MaKhachHang NVARCHAR(50) UNIQUE,
-    TenKhachHang NVARCHAR(255),
+    TenKhachHang NVARCHAR(255) ,
 	DiaChi NVARCHAR(255),
     SDT VARCHAR(20) CHECK (SDT LIKE '[0-9]%') UNIQUE,
     GioiTinh BIT DEFAULT 1,
@@ -44,7 +44,7 @@ GO
 CREATE TABLE ThuongHieu (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaTH NVARCHAR(50) NOT NULL UNIQUE,
-    TenTH NVARCHAR(255) NOT NULL,
+    TenTH NVARCHAR(255) NOT NULL UNIQUE,
     TrangThai BIT DEFAULT 1 CHECK (TrangThai IN (0,1))
 );
 GO
@@ -54,7 +54,7 @@ GO
 CREATE TABLE MauSac (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaMS NVARCHAR(50) NOT NULL UNIQUE,
-    TenMS NVARCHAR(255) NOT NULL,
+    TenMS NVARCHAR(255) NOT NULL UNIQUE,
     TrangThai BIT DEFAULT 1 CHECK (TrangThai IN (0,1))
 );
 GO
@@ -65,7 +65,7 @@ GO
 CREATE TABLE KichThuoc (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaKT NVARCHAR(50) NOT NULL UNIQUE,
-    TenKT NVARCHAR(255) NOT NULL,
+    TenKT NVARCHAR(255) NOT NULL UNIQUE,
     TrangThai BIT DEFAULT 1 CHECK (TrangThai IN (0,1))
 );
 GO
@@ -91,7 +91,7 @@ GO
 CREATE TABLE SanPham (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaSanPham NVARCHAR(50) NOT NULL UNIQUE,
-    TenSanPham NVARCHAR(255) NOT NULL,
+    TenSanPham NVARCHAR(255) NOT NULL UNIQUE,
     HinhAnh NVARCHAR(255),
     IDChiTietSanPham INT FOREIGN KEY REFERENCES ChiTietSanPham(ID)
 );
@@ -102,8 +102,9 @@ GO
 CREATE TABLE PhieuGiamGia (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaPhieuGiamGia NVARCHAR(50) UNIQUE,
-    TenPhieuGiamGia NVARCHAR(255),
+    TenPhieuGiamGia NVARCHAR(255) UNIQUE,
     SoLuong INT DEFAULT 0 CHECK (SoLuong >= 0),
+	DaDung int,
 	kieuGiam CHAR(3) CHECK (kieuGiam IN ('VND', '%')) NOT NULL,
     mucGiam DECIMAL(10,2) NOT NULL,
     hoaDonToiThieu DECIMAL(10,2) NOT NULL ,
@@ -326,27 +327,27 @@ INSERT INTO SanPham (MaSanPham, TenSanPham, HinhAnh, IDChiTietSanPham) VALUES
 ('SP020', N'Áo North Face Jacket', N'north_face_jacket.jpg', 20);
 
 
-INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong, kieuGiam, mucGiam, hoaDonToiThieu, NgayBatDau, NgayKetThuc, TrangThai) VALUES
-('PG001', N'Giảm giá 10%', 100, '%', 10.00, 500000.00, '2025-03-01', '2025-03-31', 1),
-('PG002', N'Giảm 50K', 50, 'VND', 50000.00, 300000.00, '2025-04-01', '2025-04-30', 1),
-('PG003', N'Giảm giá 20%', 80, '%', 20.00, 1000000.00, '2025-05-01', '2025-05-31', 1),
-('PG004', N'Giảm 100K', 30, 'VND', 100000.00, 600000.00, '2025-06-01', '2025-06-30', 1),
-('PG005', N'Giảm giá 15%', 70, '%', 15.00, 800000.00, '2025-07-01', '2025-07-31', 1),
-('PG006', N'Giảm 200K', 20, 'VND', 200000.00, 1000000.00, '2025-08-01', '2025-08-31', 1),
-('PG007', N'Giảm giá 5%', 150, '%', 5.00, 200000.00, '2025-09-01', '2025-09-30', 1),
-('PG008', N'Giảm 30K', 90, 'VND', 30000.00, 150000.00, '2025-10-01', '2025-10-31', 1),
-('PG009', N'Giảm giá 25%', 60, '%', 25.00, 1200000.00, '2025-11-01', '2025-11-30', 1),
-('PG010', N'Giảm 150K', 40, 'VND', 150000.00, 700000.00, '2025-12-01', '2025-12-31', 1),
-('PG011', N'Giảm giá 30%', 50, '%', 30.00, 1500000.00, '2026-01-01', '2026-01-31', 1),
-('PG012', N'Giảm 80K', 70, 'VND', 80000.00, 400000.00, '2026-02-01', '2026-02-28', 1),
-('PG013', N'Giảm giá 12%', 80, '%', 12.00, 600000.00, '2026-03-01', '2026-03-31', 1),
-('PG014', N'Giảm 120K', 30, 'VND', 120000.00, 800000.00, '2026-04-01', '2026-04-30', 1),
-('PG015', N'Giảm giá 18%', 90, '%', 18.00, 900000.00, '2026-05-01', '2026-05-31', 1),
-('PG016', N'Giảm 250K', 20, 'VND', 250000.00, 1200000.00, '2026-06-01', '2026-06-30', 1),
-('PG017', N'Giảm giá 8%', 100, '%', 8.00, 300000.00, '2026-07-01', '2026-07-31', 1),
-('PG018', N'Giảm 70K', 60, 'VND', 70000.00, 350000.00, '2026-08-01', '2026-08-31', 1),
-('PG019', N'Giảm giá 22%', 40, '%', 22.00, 1100000.00, '2026-09-01', '2026-09-30', 1),
-('PG020', N'Giảm 180K', 50, 'VND', 180000.00, 900000.00, '2026-10-01', '2026-10-31', 1);
+INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, SoLuong,DaDung, kieuGiam, mucGiam, hoaDonToiThieu, NgayBatDau, NgayKetThuc, TrangThai) VALUES
+('PG001', N'Giảm giá 10%', 100,3, '%', 10.00, 500000.00, '2025-03-01', '2025-03-31', 1),
+('PG002', N'Giảm 50K', 50,3, 'VND', 50000.00, 300000.00, '2025-04-01', '2025-04-30', 1),
+('PG003', N'Giảm giá 20%', 80,3, '%', 20.00, 1000000.00, '2025-05-01', '2025-05-31', 1),
+('PG004', N'Giảm 100K', 30,3, 'VND', 100000.00, 600000.00, '2025-06-01', '2025-06-30', 1),
+('PG005', N'Giảm giá 15%', 70,3, '%', 15.00, 800000.00, '2025-07-01', '2025-07-31', 1),
+('PG006', N'Giảm 200K', 20,3, 'VND', 200000.00, 1000000.00, '2025-08-01', '2025-08-31', 1),
+('PG007', N'Giảm giá 5%', 150,3, '%', 5.00, 200000.00, '2025-09-01', '2025-09-30', 1),
+('PG008', N'Giảm 30K', 90,3, 'VND', 30000.00, 150000.00, '2025-10-01', '2025-10-31', 1),
+('PG009', N'Giảm giá 25%', 60,4, '%', 25.00, 1200000.00, '2025-11-01', '2025-11-30', 1),
+('PG010', N'Giảm 150K', 40,3, 'VND', 150000.00, 700000.00, '2025-12-01', '2025-12-31', 1),
+('PG011', N'Giảm giá 30%', 50,8, '%', 30.00, 1500000.00, '2026-01-01', '2026-01-31', 1),
+('PG012', N'Giảm 80K', 70,3, 'VND', 80000.00, 400000.00, '2026-02-01', '2026-02-28', 1),
+('PG013', N'Giảm giá 12%', 80,12, '%', 12.00, 600000.00, '2026-03-01', '2026-03-31', 1),
+('PG014', N'Giảm 120K', 30,3, 'VND', 120000.00, 800000.00, '2026-04-01', '2026-04-30', 1),
+('PG015', N'Giảm giá 18%', 90,11, '%', 18.00, 900000.00, '2026-05-01', '2026-05-31', 1),
+('PG016', N'Giảm 250K', 20,12, 'VND', 250000.00, 1200000.00, '2026-06-01', '2026-06-30', 1),
+('PG017', N'Giảm giá 8%', 100,15, '%', 8.00, 300000.00, '2026-07-01', '2026-07-31', 1),
+('PG018', N'Giảm 70K', 60,1, 'VND', 70000.00, 350000.00, '2026-08-01', '2026-08-31', 1),
+('PG019', N'Giảm giá 22%', 40,19, '%', 22.00, 1100000.00, '2026-09-01', '2026-09-30', 1),
+('PG020', N'Giảm 180K', 50,0, 'VND', 180000.00, 900000.00, '2026-10-01', '2026-10-31', 1);
 
 
 INSERT INTO HoaDon (IDNhanVien, IDKhachHang, IDPhieuGiamGia, MaHoaDon, TongTien, GiamGia, NgayTao, ThanhTien, TrangThai) VALUES
@@ -425,9 +426,6 @@ END;
 GO
 
 
-INSERT INTO KhachHang (TenKhachHang, DiaChi, SDT, GioiTinh, NgaySinh)
-VALUES (N'Nguyễn Văn Anh', N'123 Hà Nội', '0901234567', 1, '1990-01-01')
-
 
 
 
@@ -445,8 +443,6 @@ BEGIN
 END;
 GO
 
-INSERT INTO NhanVien (TenNhanVien, NgaySinh, SDT, GioiTinh, QueQuan, MatKhau, TrangThai, IDChucVu)
-VALUES (N'Nguyễn Văn c', '1990-01-01', '0901234567', 1, N'Hà Nội', 'pass123', 1, 1);
 
 
 -- phiếu giảm giá tự động tăng
@@ -462,8 +458,7 @@ BEGIN
 END;
 GO
 
-INSERT INTO PhieuGiamGia (TenPhieuGiamGia, SoLuong, kieuGiam, mucGiam, hoaDonToiThieu, NgayBatDau, NgayKetThuc, TrangThai)
-VALUES (N'Giảm giá 10%', 100, '%', 10.00, 500000.00, '2025-03-01', '2025-03-31', 1);
+
 select * from PhieuGiamGia
  -- hóa đơn tự động tăng
 CREATE TRIGGER trg_AutoGenerateMaHoaDon_Simple
@@ -478,6 +473,3 @@ BEGIN
 END;
 GO
 
-INSERT INTO HoaDon (IDNhanVien, IDKhachHang, IDPhieuGiamGia, TongTien, GiamGia, ThanhTien, TrangThai)
-VALUES (1, 1, 1, 1000000.00, 100000.00, 900000.00, 1);
-SELECT * FROM HoaDon;
