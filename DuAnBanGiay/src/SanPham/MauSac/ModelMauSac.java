@@ -1,14 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package SanPham.MauSac;
 
-/**
- *
- * @author lenovo
- */
 public class ModelMauSac {
+
     private int idMauSac;
     private String ma;
     private String ten;
@@ -24,9 +17,13 @@ public class ModelMauSac {
         this.trangThai = trangThai;
     }
 
+    public ModelMauSac(String ma, String ten, boolean trangThai) {
+        this.ma = ma;
+        this.ten = ten;
+        this.trangThai = trangThai;
+    }
     
 
-   
     public int getIdMauSac() {
         return idMauSac;
     }
@@ -61,17 +58,19 @@ public class ModelMauSac {
 
     @Override
     public String toString() {
-        return "MauSac{" +
-                "idMauSac=" + idMauSac +
-                ", ma='" + ma + '\'' +
-                ", ten='" + ten + '\'' +
-                ", trangThai=" + trangThai +
-                '}';
+        return "MauSac{"
+                + "idMauSac=" + idMauSac
+                + ", ma='" + ma + '\''
+                + ", ten='" + ten + '\''
+                + ", trangThai=" + trangThai
+                + '}';
     }
-    public Object[] todataRow(){
-        return new Object[]{this.getIdMauSac(),
-            this.getMa(),
+
+    public Object[] toDataRowMS() {
+        return new Object[]{
+            this.getMa(), // Trả về mã thay vì ID để phù hợp với bảng giao diện
             this.getTen(),
-            this.isTrangThai()?"Hoạt Động":"Ngừng Hoạt Động"};
+            this.isTrangThai() ? "Hoạt Động" : "Ngừng Hoạt Động"
+        };
     }
 }

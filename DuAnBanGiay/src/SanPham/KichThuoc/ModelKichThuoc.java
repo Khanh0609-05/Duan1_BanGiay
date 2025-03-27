@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package SanPham.KichThuoc;
 
-/**
- *
- * @author lenovo
- */
 public class ModelKichThuoc {
     private int id;
     private String ma;
@@ -18,6 +10,12 @@ public class ModelKichThuoc {
 
     public ModelKichThuoc(int id, String ma, String ten, boolean trangThai) {
         this.id = id;
+        this.ma = ma;
+        this.ten = ten;
+        this.trangThai = trangThai;
+    }
+
+    public ModelKichThuoc(String ma, String ten, boolean trangThai) {
         this.ma = ma;
         this.ten = ten;
         this.trangThai = trangThai;
@@ -55,12 +53,11 @@ public class ModelKichThuoc {
         this.trangThai = trangThai;
     }
 
-    public Object[] toDataRow() {
+    public Object[] toDataRowKT() {
         return new Object[]{
-            id,
-            ma,
-            ten,
-            trangThai ? "Hoạt động" : "Ngừng hoạt động"
+            this.ma, // Chỉ hiển thị MaKT
+            this.ten, // Chỉ hiển thị TenKT
+            this.trangThai ? "Hoạt động" : "Ngừng hoạt động"
         };
     }
 

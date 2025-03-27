@@ -24,7 +24,7 @@ public class DBconnect {//kết nối với SQL server
     private static final String PASSWORD = "123";
     private static final String SERVER = "localhost";
     private static final String PORT = "1433";
-    private static final String DATABASE_NAME = "BanGiay3";
+    private static final String DATABASE_NAME = "BanHangTaiQuay";
     private static final boolean USING_SSL = true;
    
     private static String CONNECT_STRING;
