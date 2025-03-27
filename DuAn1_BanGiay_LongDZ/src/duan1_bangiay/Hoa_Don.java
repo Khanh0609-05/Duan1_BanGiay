@@ -72,9 +72,9 @@ public class Hoa_Don extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txt_MaNV = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        dtc_Tu = new com.toedter.calendar.JDateChooser();
+        dtc_Tu = new org.netbeans.modules.form.InvalidComponent();
         jLabel6 = new javax.swing.JLabel();
-        dtc_Den = new com.toedter.calendar.JDateChooser();
+        dtc_Den = new org.netbeans.modules.form.InvalidComponent();
         btn_TimKiem = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -106,6 +106,11 @@ public class Hoa_Don extends javax.swing.JFrame {
         jLabel2.setText("Mã hóa đơn :");
 
         txt_MaHD.setEditable(false);
+        txt_MaHD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_MaHDActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Mã khách hàng :");
@@ -119,12 +124,8 @@ public class Hoa_Don extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Thời gian từ :");
 
-        dtc_Tu.setDateFormatString("dd-MM-yyyy");
-
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("đến");
-
-        dtc_Den.setDateFormatString("dd-MM-yyyy");
 
         btn_TimKiem.setBackground(new java.awt.Color(255, 255, 153));
         btn_TimKiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -301,6 +302,10 @@ public class Hoa_Don extends javax.swing.JFrame {
         this.showData(index);
     }//GEN-LAST:event_tbl_HoaDonMouseClicked
 
+    private void txt_MaHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaHDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_MaHDActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -339,8 +344,8 @@ public class Hoa_Don extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_InHoaDon;
     private javax.swing.JButton btn_TimKiem;
-    private com.toedter.calendar.JDateChooser dtc_Den;
-    private com.toedter.calendar.JDateChooser dtc_Tu;
+    private org.netbeans.modules.form.InvalidComponent dtc_Den;
+    private org.netbeans.modules.form.InvalidComponent dtc_Tu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
