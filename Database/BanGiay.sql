@@ -90,7 +90,7 @@ GO
 -- 8. SanPham
 CREATE TABLE SanPham (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    MaSanPham NVARCHAR(50) NOT NULL UNIQUE,
+    MaSanPham NVARCHAR(50) UNIQUE,
     TenSanPham NVARCHAR(255) NOT NULL UNIQUE,
     HinhAnh NVARCHAR(255),
     IDChiTietSanPham INT FOREIGN KEY REFERENCES ChiTietSanPham(ID)
@@ -473,3 +473,17 @@ BEGIN
 END;
 GO
 
+CREATE TRIGGER trg_AutoGenerateMaSanPham_Simple
+ON SanPham
+AFTER INSERT
+AS
+BEGIN
+    UPDATE SanPham
+    SET MaSanPham = N'SP' + RIGHT('000' + CAST(i.ID AS NVARCHAR(3)), 3)
+    FROM SanPham sp
+    JOIN INSERTED i ON sp.ID = i.ID;
+END;
+GO
+
+
+INSERT INTO SanPham (TenSanPham, HinhAnh, IDChiTietSanPham) VALUES (N'Sản phẩm 1', N'hinh1.jpg', 1);
