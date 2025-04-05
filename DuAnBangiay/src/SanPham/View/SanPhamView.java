@@ -570,6 +570,7 @@ public class SanPhamView extends javax.swing.JFrame {
         txt_maMS.setEditable(false);
 
         buttonGroup3.add(rdo_hoatdongMS);
+        rdo_hoatdongMS.setSelected(true);
         rdo_hoatdongMS.setText("Hoạt Động");
         rdo_hoatdongMS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -881,7 +882,7 @@ public class SanPhamView extends javax.swing.JFrame {
         if (th != null) {
             String maCu = tbl_thuonghieu.getValueAt(i, 0).toString();
             // Kiểm tra nếu mã mới trùng với mã khác ngoài mã cũ
-            ModelThuongHieu existing = rp.checkTrungTH(th.getMaTH());
+            ModelThuongHieu existing = rp.checkTrungtenTH(th.getMaTH());
             if (existing != null && !existing.getMaTH().equals(maCu)) {
                 JOptionPane.showMessageDialog(this, "Mã thương hiệu mới đã tồn tại");
                 return;
@@ -898,10 +899,7 @@ public class SanPhamView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_suaTHActionPerformed
 
     private void btn_themTHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themTHActionPerformed
-        if (i == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn thương hiệu cần sửa");
-            return;
-        }
+        
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn thêm thương hiệu này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             return;
@@ -909,9 +907,13 @@ public class SanPhamView extends javax.swing.JFrame {
 
         ModelThuongHieu th = readFormTH();
         if (th != null) {
-            if (rp.checkTrungTH(th.getMaTH()) != null) {
-                JOptionPane.showMessageDialog(this, "Mã thương hiệu đã tồn tại");
-            } else {
+            if (rp.checkTrungtenTH(th.getTenTH()) != null) {
+                JOptionPane.showMessageDialog(this, "Tên thương hiệu đã tồn tại");
+            }
+//            else if(rp.checkTrungTH(th.getmaTH())!=null){
+//                JOptionPane.showInternalMessageDialog(this, "Mã thương hiệu đã tồn tại");
+//            }
+            else {
                 if (rp.themTH(th) > 0) {
                     JOptionPane.showMessageDialog(this, "Thêm thành công");
                     fillTableTH(rp.getallTH());
@@ -931,8 +933,8 @@ public class SanPhamView extends javax.swing.JFrame {
 
         ModelMauSac ms = readFormMS();
         if (ms != null) {
-            if (rpMauSac.checkTrungMS(ms.getMa()) != null) {
-                JOptionPane.showMessageDialog(this, "Mã màu sắc đã tồn tại");
+            if (rpMauSac.checkTrungMS(ms.getTen()) != null) {
+                JOptionPane.showMessageDialog(this, "Tên màu sắc đã tồn tại");
             } else {
                 if (rpMauSac.themMS(ms) > 0) {
                     JOptionPane.showMessageDialog(this, "Thêm thành công");
@@ -1002,8 +1004,8 @@ public class SanPhamView extends javax.swing.JFrame {
 
         ModelKichThuoc kt = readFormKT();
         if (kt != null) {
-            if (rpKichThuoc.checkTrungKT(kt.getMa()) != null) {
-                JOptionPane.showMessageDialog(this, "Mã kích thước đã tồn tại");
+            if (rpKichThuoc.checkTrungKT(kt.getTen()) != null) {
+                JOptionPane.showMessageDialog(this, "Tên kích thước đã tồn tại");
             } else {
                 if (rpKichThuoc.themKT(kt) > 0) {
                     JOptionPane.showMessageDialog(this, "Thêm thành công");

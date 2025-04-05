@@ -87,16 +87,45 @@ public class RepositoriThuongHieu {
     
     
     
-    public ModelThuongHieu checkTrungTH(String maMoi) {
-    // Tìm mã mới xem nó đã tồn tại trong database chưa
-    sql = "SELECT ID, MaTH, TenTH, TrangThai FROM ThuongHieu WHERE MaTH = ?";
+//    public ModelThuongHieu checkTrungTH(String maMoi) {
+//    // Tìm mã mới xem nó đã tồn tại trong database chưa
+//    sql = "SELECT ID, MaTH, TenTH, TrangThai FROM ThuongHieu WHERE MaTH = ?";
+//    
+//    ModelThuongHieu thuongHieu = null;
+//    
+//    try {
+//        con = DBconnect.getConnection();
+//        ps = con.prepareStatement(sql);
+//        ps.setString(1, maMoi);
+//        rs = ps.executeQuery();
+//        
+//        while (rs.next()) {
+//            
+//            int id = rs.getInt(1);
+//            String ma = rs.getString(2);
+//            String ten = rs.getString(3);
+//            boolean trangThai = rs.getBoolean(4);
+//            
+//            thuongHieu = new ModelThuongHieu(id, ma, ten, trangThai);
+//        }
+//        return thuongHieu; 
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        return null;
+//    } 
+//    }
+//    
+    
+public ModelThuongHieu checkTrungtenTH(String tenMoi) {
+    
+    sql = "SELECT ID, MaTH, TenTH, TrangThai FROM ThuongHieu WHERE TenTH = ?";
     
     ModelThuongHieu thuongHieu = null;
     
     try {
         con = DBconnect.getConnection();
         ps = con.prepareStatement(sql);
-        ps.setString(1, maMoi);
+        ps.setString(1, tenMoi);
         rs = ps.executeQuery();
         
         while (rs.next()) {
@@ -114,73 +143,5 @@ public class RepositoriThuongHieu {
         return null;
     } 
     }
-    
-    
-//    public int xoaTH(String ma) {  // Đổi từ int id sang String ma
-//    sql = "DELETE FROM ThuongHieu WHERE MaTH = ?";  // Sử dụng MaTH thay vì ID
-//    try {
-//        con = DBconnect.getConnection();
-//        ps = con.prepareStatement(sql);
-//        ps.setString(1, ma);  // Đổi sang setString
-//        return ps.executeUpdate();
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        return 0;
-//    } finally {
-//        try {
-//            if (ps != null) ps.close();
-//            if (con != null) con.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
-    
-
-
-// Phương thức ẩn thương hiệu
-public int anTH(String ma) {
-    sql = "UPDATE ThuongHieu SET TrangThai = ? WHERE MaTH = ?";
-    try {
-        con = DBconnect.getConnection();
-        ps = con.prepareStatement(sql);
-        ps.setBoolean(1, false); // Đặt trạng thái thành ẩn (false)
-        ps.setString(2, ma);
-        return ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return 0;
-    } finally {
-        try {
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-// Phương thức hiện thương hiệu
-public int hienTH(String ma) {
-    sql = "UPDATE ThuongHieu SET TrangThai = ? WHERE MaTH = ?";
-    try {
-        con = DBconnect.getConnection();
-        ps = con.prepareStatement(sql);
-        ps.setBoolean(1, true); // Đặt trạng thái thành hoạt động (true)
-        ps.setString(2, ma);
-        return ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return 0;
-    } finally {
-        try {
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
 }
 

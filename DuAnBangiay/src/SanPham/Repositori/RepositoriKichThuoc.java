@@ -31,9 +31,7 @@ public class RepositoriKichThuoc {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
     public int themKT(ModelKichThuoc m) {
@@ -48,9 +46,7 @@ public class RepositoriKichThuoc {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
     public int suaKT(int id, ModelKichThuoc m) {
@@ -66,13 +62,11 @@ public class RepositoriKichThuoc {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
     public ModelKichThuoc checkTrungKT(String maMoi) {
-        sql = "SELECT ID, MaKT, TenKT, TrangThai FROM KichThuoc WHERE MaKT = ?";
+        sql = "SELECT ID, MaKT, TenKT, TrangThai FROM KichThuoc WHERE TenKT = ?";
         ModelKichThuoc kichThuoc = null;
         try {
             con = DBconnect.getConnection();
@@ -90,18 +84,8 @@ public class RepositoriKichThuoc {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
-    private void closeResources() {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    
     }
-}

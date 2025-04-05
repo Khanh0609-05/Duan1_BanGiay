@@ -31,8 +31,6 @@ public class RepositoriMauSac {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            closeResources();
         }
     }
 
@@ -48,9 +46,7 @@ public class RepositoriMauSac {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
     public int suaMS(int id, ModelMauSac m) {
@@ -66,13 +62,11 @@ public class RepositoriMauSac {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        } finally {
-            closeResources();
         }
     }
 
     public ModelMauSac checkTrungMS(String maMoi) {
-        sql = "SELECT ID, MaMS, TenMS, TrangThai FROM MauSac WHERE MaMS = ?";
+        sql = "SELECT ID, MaMS, TenMS, TrangThai FROM MauSac WHERE TenMS = ?";
         ModelMauSac mauSac = null;
         try {
             con = DBconnect.getConnection();
@@ -90,18 +84,8 @@ public class RepositoriMauSac {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            closeResources();
-        }
+        } 
     }
 
-    private void closeResources() {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
