@@ -123,7 +123,7 @@ CREATE TABLE HoaDon (
     IDKhachHang INT FOREIGN KEY REFERENCES KhachHang(ID),
     IDPhieuGiamGia INT FOREIGN KEY REFERENCES PhieuGiamGia(ID),
 	MaHoaDon NVARCHAR(50) UNIQUE,
-    TongTien DECIMAL(10, 2) CHECK (TongTien > 0),
+    TongTien DECIMAL(10, 2) CHECK (TongTien >= 0),
     GiamGia DECIMAL(10, 2) CHECK (GiamGia >= 0),
     NgayTao DATETIME DEFAULT GETDATE(),
     ThanhTien DECIMAL(10, 2) CHECK (ThanhTien > 0),
