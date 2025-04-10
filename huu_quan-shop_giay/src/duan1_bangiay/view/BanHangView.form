@@ -50,7 +50,8 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                              <Component id="btnHuyDon1" min="-2" pref="114" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnTaoDon" min="-2" pref="114" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnThanhToan" min="-2" pref="114" max="-2" attributes="0"/>
@@ -63,7 +64,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="7" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -132,6 +133,7 @@
                           <Component id="btnHuyDon" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                           <Component id="btnThanhToan" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                           <Component id="btnTaoDon" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
+                          <Component id="btnHuyDon1" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
@@ -820,6 +822,21 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblTongTien">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnHuyDon1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="RESET ALL"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder>
+              <Color PropertyName="color" blue="0" green="0" red="ff" type="rgb"/>
+            </LineBorder>
+          </Border>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHuyDon1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

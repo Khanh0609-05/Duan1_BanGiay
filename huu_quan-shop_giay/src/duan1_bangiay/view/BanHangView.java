@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.Timer;
 
 /**
  *
@@ -38,7 +41,16 @@ public class BanHangView extends javax.swing.JFrame {
         loadTables();
         searchListener();
         donHangListener();
-        txtNgayTao.setText(java.time.LocalDateTime.now().toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Tạo Timer để cập nhật thời gian
+        Timer timer = new Timer(1000, e -> {
+            LocalDateTime now = LocalDateTime.now();
+            txtNgayTao.setText(now.format(formatter)); // Hiển thị thời gian đã định dạng
+        });
+
+        timer.start(); // Bắt đầu timer
+
         txtMaNhanVien.setText(txtMaNhanVien.getText());
         txtSoDienThoai.addActionListener(e -> checkAndFillCustomerDetails(txtSoDienThoai.getText()));
         txtSoTienTra.getDocument().addDocumentListener(new DocumentListener() {
@@ -255,6 +267,7 @@ public class BanHangView extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         lblTongTien = new javax.swing.JLabel();
+        btnHuyDon1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
@@ -532,6 +545,14 @@ public class BanHangView extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel17.setText("Tổng Tiền :");
 
+        btnHuyDon1.setText("RESET ALL");
+        btnHuyDon1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+        btnHuyDon1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyDon1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -552,7 +573,8 @@ public class BanHangView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(120, 120, 120)
+                                .addComponent(btnHuyDon1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnTaoDon, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -561,7 +583,7 @@ public class BanHangView extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnHuyDon, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -614,7 +636,8 @@ public class BanHangView extends javax.swing.JFrame {
                             .addComponent(btnInBill, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnHuyDon, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTaoDon, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnTaoDon, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnHuyDon1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
@@ -792,8 +815,8 @@ public class BanHangView extends javax.swing.JFrame {
                 // Retrieve product details from the selected row
                 String maSP = tblSanPham.getValueAt(row, 1).toString(); // Mã sản phẩm
                 String tenSP = tblSanPham.getValueAt(row, 2).toString(); // Tên sản phẩm
+                Integer soLuongTon = (Integer) tblSanPham.getValueAt(row, 5); // Tên sản phẩm
                 BigDecimal donGia = new BigDecimal(tblSanPham.getValueAt(row, 4).toString()); // Giá bán
-
                 // Prompt for the quantity
                 String soLuongStr = JOptionPane.showInputDialog("Nhập số lượng cho sản phẩm: " + tenSP);
                 if (soLuongStr == null || soLuongStr.trim().isEmpty()) {
@@ -803,11 +826,15 @@ public class BanHangView extends javax.swing.JFrame {
 
                 // Parse and validate the quantity input
                 int soLuong = Integer.parseInt(soLuongStr.trim());
+
                 if (soLuong <= 0) {
                     JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0!");
                     return;
                 }
-
+                if (soLuong > soLuongTon) {
+                    JOptionPane.showMessageDialog(null, "Không thể thêm sản phẩm \"" + tenSP + "\". Số lượng tồn kho chỉ còn: " + soLuongTon);
+                    return;
+                }
                 // Check if the product already exists in the invoice details
                 boolean productExists = checkProductExistsInInvoice(maHoaDonHienTai, maSP);
 
@@ -833,7 +860,7 @@ public class BanHangView extends javax.swing.JFrame {
 
                 // Notify success
                 JOptionPane.showMessageDialog(null, "Đã thêm sản phẩm \"" + tenSP + "\" thành công và cập nhật số lượng!");
-
+                loadTables();
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ! Vui lòng nhập số nguyên.");
             } catch (Exception e) {
@@ -1032,6 +1059,7 @@ public class BanHangView extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null,
                         "Đã xóa sản phẩm \"" + tenHangHoa + "\" khỏi hóa đơn và tăng lại số lượng trong kho thành công!");
+                loadTables();
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Lỗi khi xử lý số lượng sản phẩm! Vui lòng kiểm tra lại.");
             } catch (Exception e) {
@@ -1042,6 +1070,15 @@ public class BanHangView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để xóa!");
         }
     }//GEN-LAST:event_tblHoaDonChiTietMouseClicked
+
+    private void btnHuyDon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDon1ActionPerformed
+        // TODO add your handling code here:
+        clearGioHang();
+        clearTextFields();
+        loadTables();
+        txtTimKiem.setText("");
+        lblTongTien.setText("0 VND");
+    }//GEN-LAST:event_btnHuyDon1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1091,6 +1128,7 @@ public class BanHangView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuyDon;
+    private javax.swing.JButton btnHuyDon1;
     private javax.swing.JButton btnInBill;
     private javax.swing.JButton btnTaoDon;
     private javax.swing.JButton btnThanhToan;
@@ -1446,7 +1484,7 @@ public class BanHangView extends javax.swing.JFrame {
 
     public void xoaSanPhamKhoiChiTietHoaDon(String maHoaDon, String tenHangHoa) {
         String sql = "DELETE FROM ChiTietHoaDon WHERE IDHoaDon = (SELECT ID FROM HoaDon WHERE MaHoaDon = ?) "
-                + "AND IDSanPham = (SELECT ID FROM SanPham WHERE TenSanPham = ?)";
+                + "AND IDSanPham = (SELECT TOP 1 ID FROM SanPham WHERE TenSanPham = ?)";
         try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
             // Set parameters for the SQL query
             ps.setString(1, maHoaDon);  // Hóa đơn ID
