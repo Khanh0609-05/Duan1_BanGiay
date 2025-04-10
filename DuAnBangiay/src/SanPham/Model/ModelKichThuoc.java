@@ -21,6 +21,13 @@ public class ModelKichThuoc {
         this.trangThai = trangThai;
     }
 
+    public ModelKichThuoc(String ma, String ten) {
+        this.ma = ma;
+        this.ten = ten;
+    }
+    
+    
+
     public int getId() {
         return id;
     }

@@ -22,6 +22,12 @@ public class ModelMauSac {
         this.ten = ten;
         this.trangThai = trangThai;
     }
+
+    public ModelMauSac(String ma, String ten) {
+        this.ma = ma;
+        this.ten = ten;
+    }
+    
     
 
     public int getIdMauSac() {

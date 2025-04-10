@@ -320,4 +320,28 @@ public class RepositoriSanPhamChiTiet {
             return false; // Trả về false nếu có lỗi
         }
     }
+    
+    
+    public boolean checkTrungTenSPCT(String tenSanPham) {
+    String sql = """
+        SELECT COUNT(*) 
+        FROM SanPham 
+        WHERE TenSanPham = ?
+    """;
+    
+    try (Connection con = DBconnect.getConnection(); 
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setString(1, tenSanPham.trim());
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Returns true if a matching name exists
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false; // Default to false if an error occurs
+}
+    
 }

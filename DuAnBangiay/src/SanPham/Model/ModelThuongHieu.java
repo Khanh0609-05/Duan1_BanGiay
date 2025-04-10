@@ -26,6 +26,12 @@ public class ModelThuongHieu {
         this.tenTH = tenTH;
         this.trangThai = trangThai;
     }
+
+    public ModelThuongHieu(String maTH, String tenTH) {
+        this.maTH = maTH;
+        this.tenTH = tenTH;
+    }
+    
     
 
     public int getId() {

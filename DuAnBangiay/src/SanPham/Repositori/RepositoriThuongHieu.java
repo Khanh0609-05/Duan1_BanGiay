@@ -87,34 +87,7 @@ public class RepositoriThuongHieu {
     
     
     
-//    public ModelThuongHieu checkTrungTH(String maMoi) {
-//    // Tìm mã mới xem nó đã tồn tại trong database chưa
-//    sql = "SELECT ID, MaTH, TenTH, TrangThai FROM ThuongHieu WHERE MaTH = ?";
-//    
-//    ModelThuongHieu thuongHieu = null;
-//    
-//    try {
-//        con = DBconnect.getConnection();
-//        ps = con.prepareStatement(sql);
-//        ps.setString(1, maMoi);
-//        rs = ps.executeQuery();
-//        
-//        while (rs.next()) {
-//            
-//            int id = rs.getInt(1);
-//            String ma = rs.getString(2);
-//            String ten = rs.getString(3);
-//            boolean trangThai = rs.getBoolean(4);
-//            
-//            thuongHieu = new ModelThuongHieu(id, ma, ten, trangThai);
-//        }
-//        return thuongHieu; 
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        return null;
-//    } 
-//    }
-//    
+   
     
 public ModelThuongHieu checkTrungtenTH(String tenMoi) {
     
