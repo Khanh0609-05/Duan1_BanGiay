@@ -1,6 +1,6 @@
-﻿CREATE DATABASE BanHangTaiQuay
+﻿CREATE DATABASE BanHangTaiQuay1
 GO
-USE BanHangTaiQuay
+USE BanHangTaiQuay1
 GO
 
 
@@ -34,7 +34,7 @@ CREATE TABLE KhachHang (
 	MaKhachHang NVARCHAR(50) UNIQUE,
     TenKhachHang NVARCHAR(255) ,
 	DiaChi NVARCHAR(255),
-    SDT VARCHAR(20) CHECK (SDT LIKE '[0-9]%') UNIQUE,
+    SDT VARCHAR(20) UNIQUE,
     GioiTinh BIT DEFAULT 1,
     NgaySinh DATETIME
 );
