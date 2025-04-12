@@ -18,40 +18,35 @@ import javax.swing.JOptionPane;
  */
 public class HoaDonChiTietRepository {
 
-    public List<Object[]> layChiTietDonHangTuCSDL(String maDonHang) {
-        List<Object[]> chiTietDonHang = new ArrayList<>();
-        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY cthd.ID) AS STT, "
-                + "sp.TenSanPham AS TenHangHoa, cthd.DonGia, cthd.SoLuong, "
-                + "(cthd.DonGia * cthd.SoLuong) AS ThanhTien "
-                + "FROM ChiTietHoaDon cthd "
-                + "JOIN SanPham sp ON cthd.IDSanPham = sp.ID "
-                + "JOIN HoaDon hd ON cthd.IDHoaDon = hd.ID "
-                + "WHERE hd.MaHoaDon = ?";
+    public List<Object[]> layDanhSachChiTietHoaDonTuCSDL(String maHoaDon) {
+    List<Object[]> danhSachChiTiet = new ArrayList<>();
+    String sql = "SELECT ROW_NUMBER() OVER (ORDER BY cthd.ID) AS STT, "
+            + "sp.TenSanPham, cthd.DonGia, cthd.SoLuong, "
+            + "(cthd.DonGia * cthd.SoLuong) AS ThanhTien "
+            + "FROM ChiTietHoaDon cthd "
+            + "JOIN SanPham sp ON cthd.IDSanPham = sp.ID "
+            + "JOIN HoaDon hd ON cthd.IDHoaDon = hd.ID "
+            + "WHERE hd.MaHoaDon = ?";
 
-        try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setString(1, maDonHang);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Object[] dong = new Object[]{ // Adjust variable name too
-                        rs.getInt("STT"),
-                        rs.getString("TenHangHoa"),
-                        rs.getBigDecimal("DonGia"),
-                        rs.getInt("SoLuong"),
-                        rs.getBigDecimal("ThanhTien")
-                    };
-                    chiTietDonHang.add(dong);
-                }
+    try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, maHoaDon);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                danhSachChiTiet.add(new Object[]{
+                    rs.getInt("STT"),
+                    rs.getString("TenSanPham"),
+                    rs.getBigDecimal("DonGia"),
+                    rs.getInt("SoLuong"),
+                    rs.getBigDecimal("ThanhTien")
+                });
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi lấy chi tiết đơn hàng: " + e.getMessage());
         }
-
-        return chiTietDonHang;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
     }
+    return danhSachChiTiet;
+}
 
     public void saveProductToInvoice(String maDonHang, String maSanPham, int soLuong, BigDecimal donGia) {
         String sql = "INSERT INTO ChiTietHoaDon (IDHoaDon, IDSanPham, SoLuong, DonGia) "
@@ -87,4 +82,6 @@ public class HoaDonChiTietRepository {
             JOptionPane.showMessageDialog(null, "Lỗi thêm sản phẩm vào hóa đơn chi tiết: " + e.getMessage());
         }
     }
+    
+
 }

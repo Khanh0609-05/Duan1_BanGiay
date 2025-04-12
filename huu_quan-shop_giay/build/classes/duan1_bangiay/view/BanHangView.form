@@ -832,11 +832,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnHuyDon1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="RESET ALL"/>
+        <Property name="text" type="java.lang.String" value="L&#xc0;M M&#x1eda;I"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
             <LineBorder>
-              <Color PropertyName="color" blue="0" green="0" red="ff" type="rgb"/>
+              <Color PropertyName="color" blue="0" green="cc" red="33" type="rgb"/>
             </LineBorder>
           </Border>
         </Property>

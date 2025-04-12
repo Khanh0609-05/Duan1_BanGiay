@@ -204,11 +204,7 @@ public class BanHangView extends javax.swing.JFrame {
             model.addRow(dong); // Thêm dữ liệu mới
         }
 
-        if (danhSachChiTiet.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Không có chi tiết hóa đơn cho mã: " + maHoaDon);
-        } else {
-            //khong nhap
-        }
+        
     }
 
     /**
@@ -547,8 +543,8 @@ public class BanHangView extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel17.setText("Tổng Tiền :");
 
-        btnHuyDon1.setText("RESET ALL");
-        btnHuyDon1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+        btnHuyDon1.setText("LÀM MỚI");
+        btnHuyDon1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 204, 0)));
         btnHuyDon1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHuyDon1ActionPerformed(evt);
@@ -1013,63 +1009,156 @@ public class BanHangView extends javax.swing.JFrame {
 
     private void tblHoaDonChiTietMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonChiTietMouseClicked
         // TODO add your handling code here:
-        if (maHoaDonHienTai == null) {
-            JOptionPane.showMessageDialog(null, "Chưa chọn hóa đơn!");
-            return; // Exit if no invoice is selected
-        }
+    if (maHoaDonHienTai == null) {
+        JOptionPane.showMessageDialog(null, "Chưa chọn hóa đơn!");
+        return; // Exit if no invoice is selected
+    }
 
-// Check if the invoice has already been paid
-        if (kiemTraTrangThaiHoaDon(maHoaDonHienTai)) {
-            JOptionPane.showMessageDialog(null, "Hóa đơn đã thanh toán, không thể xóa sản phẩm!");
-            return; // Exit if the invoice is paid
-        }
+    // Check if the invoice has already been paid
+    if (kiemTraTrangThaiHoaDon(maHoaDonHienTai)) {
+        JOptionPane.showMessageDialog(null, "Hóa đơn đã thanh toán, không thể xóa hoặc cập nhật sản phẩm!");
+        return; // Exit if the invoice is paid
+    }
 
-        int row = tblHoaDonChiTiet.getSelectedRow();
-        if (row != -1) {
-            try {
-                // Retrieve product details from the selected row
-                String tenHangHoa = tblHoaDonChiTiet.getValueAt(row, 1).toString(); // Product Name
-                int soLuong = Integer.parseInt(tblHoaDonChiTiet.getValueAt(row, 3).toString()); // Quantity
+    int row = tblHoaDonChiTiet.getSelectedRow();
+    if (row != -1) {
+        try {
+            // Retrieve product details from the selected row
+            String tenHangHoa = tblHoaDonChiTiet.getValueAt(row, 1).toString(); // Product Name
+            int soLuongHienTai = Integer.parseInt(tblHoaDonChiTiet.getValueAt(row, 3).toString()); // Current Quantity
+            BigDecimal donGia = new BigDecimal(tblHoaDonChiTiet.getValueAt(row, 2).toString()); // Unit Price
 
+            // Show option dialog for user to choose action
+            Object[] options = {"Xóa sản phẩm", "Cập nhật số lượng", "Hủy"};
+            int choice = JOptionPane.showOptionDialog(null,
+                    "Chọn hành động cho sản phẩm \"" + tenHangHoa + "\":",
+                    "Chọn hành động",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[2]); // Default button is "Hủy"
+
+            if (choice == JOptionPane.YES_OPTION) { // Xóa sản phẩm
                 // Confirm deletion
                 int confirm = JOptionPane.showConfirmDialog(null,
                         "Bạn có chắc chắn muốn xóa sản phẩm \"" + tenHangHoa + "\" khỏi hóa đơn?",
                         "Xác nhận xóa sản phẩm", JOptionPane.YES_NO_OPTION);
-                if (confirm != JOptionPane.YES_OPTION) {
-                    return; // Exit if user cancels
-                }
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // Delete the product from invoice details
+                    xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
 
-                // Delete the product from invoice details
-                xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
+                    // Update product quantity in the inventory
+                    int idSanPham = getIdSanPhamFromTenSanPham(tenHangHoa); // Retrieve Product ID
+                    if (idSanPham != -1) {
+                        capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuongHienTai); // Add the quantity back to inventory
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm để cập nhật số lượng.");
+                    }
 
-                // Update product quantity in the inventory
-                int idSanPham = getIdSanPhamFromTenSanPham(tenHangHoa); // Retrieve Product ID
-                if (idSanPham != -1) {
-                    capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuong); // Add the quantity back to inventory
+                    // Refresh table details
+                    capNhatChiTietHoaDon(maHoaDonHienTai); // Refresh invoice details
+                    SanPhamRepository sanPhamRepository = new SanPhamRepository();
+                    sanPhamRepository.getAllSanPham(); // Refresh inventory list
                     loadTables();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm để cập nhật số lượng.");
+
+                    // Recalculate and update total
+                    capNhatTongTienChoHoaDon();
                 }
+            } else if (choice == JOptionPane.NO_OPTION) { // Cập nhật số lượng
+                // Show dialog to input new quantity
+                String newQuantityStr = JOptionPane.showInputDialog(null,
+                        "Nhập số lượng mới cho sản phẩm \"" + tenHangHoa + "\":",
+                        soLuongHienTai); // Default value is current quantity
 
-                // Refresh table details
-                capNhatChiTietHoaDon(maHoaDonHienTai); // Refresh invoice details
-                SanPhamRepository sanPhamRepository = new SanPhamRepository();
-                sanPhamRepository.getAllSanPham(); // Refresh inventory list
+                if (newQuantityStr != null && !newQuantityStr.trim().isEmpty()) {
+                    try {
+                        int newQuantity = Integer.parseInt(newQuantityStr);
 
-                JOptionPane.showMessageDialog(null,
-                        "Đã xóa sản phẩm \"" + tenHangHoa + "\" khỏi hóa đơn và tăng lại số lượng trong kho thành công!");
-                loadTables();
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Lỗi khi xử lý số lượng sản phẩm! Vui lòng kiểm tra lại.");
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi xóa sản phẩm: " + e.getMessage());
+                        if (newQuantity < 0) {
+                            JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn hoặc bằng 0!");
+                            return;
+                        }
+
+                        // Check inventory availability
+                        int idSanPham = getIdSanPhamFromTenSanPham(tenHangHoa);
+                        if (idSanPham != -1) {
+                            int soLuongTonKho = laySoLuongTonKho(idSanPham);
+                            int soLuongCanThem = newQuantity - soLuongHienTai; // Positive if increasing, negative if reducing
+                            if (soLuongCanThem > 0 && soLuongCanThem > soLuongTonKho) {
+                                JOptionPane.showMessageDialog(null, "Không đủ hàng trong kho! Số lượng tồn kho hiện tại: " + soLuongTonKho);
+                                return;
+                            }
+
+                            // Update quantity in the invoice detail
+                            capNhatSoLuongSanPhamTrongHoaDon(maHoaDonHienTai, tenHangHoa, newQuantity);
+
+                            // Adjust inventory
+                            capNhatSoLuongSanPhamSetQuantity(idSanPham, -soLuongCanThem); // Adjust inventory: negative to deduct, positive to add back
+
+                            // Refresh table details
+                            capNhatChiTietHoaDon(maHoaDonHienTai);
+                            loadTables();
+
+                            // Recalculate and update total
+                            capNhatTongTienChoHoaDon();
+
+                            JOptionPane.showMessageDialog(null, "Đã cập nhật số lượng sản phẩm thành công!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm trong kho!");
+                        }
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ! Vui lòng nhập lại.");
+                    }
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để xóa!");
+            // If choice is CANCEL_OPTION or closed dialog, do nothing
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi xử lý số lượng sản phẩm! Vui lòng kiểm tra lại.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để xóa hoặc cập nhật!");
+    }
     }//GEN-LAST:event_tblHoaDonChiTietMouseClicked
 
+    
+    private void capNhatSoLuongSanPhamTrongHoaDon(String maHoaDon, String tenHangHoa, int newQuantity) {
+    String sql = "UPDATE ChiTietHoaDon SET SoLuong = ? " +
+                 "WHERE IDHoaDon = (SELECT ID FROM HoaDon WHERE MaHoaDon = ?) " +
+                 "AND IDSanPham = (SELECT TOP 1 ID FROM SanPham WHERE TenSanPham = ?)";
+    try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, newQuantity);  // New quantity
+        ps.setString(2, maHoaDon);  // Invoice ID
+        ps.setString(3, tenHangHoa); // Product name
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            JOptionPane.showMessageDialog(null, "Không thể cập nhật số lượng sản phẩm!");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật số lượng: " + e.getMessage());
+    }
+}
+
+    
+private int laySoLuongTonKho(int idSanPham) {
+    String sql = "SELECT SoLuong FROM ChiTietSanPham WHERE ID = ?";
+    try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idSanPham);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("SoLuong");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi kiểm tra số lượng tồn kho: " + e.getMessage());
+    }
+    return 0; // Return 0 if error occurs or no stock found
+}
     private void btnHuyDon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDon1ActionPerformed
         // TODO add your handling code here:
         clearGioHang();
@@ -1338,7 +1427,23 @@ public class BanHangView extends javax.swing.JFrame {
                     }
                 }
             }
+int employeeId;
+        try {
+            employeeId = Integer.parseInt(maNhanVien); // Chuyển đổi mã nhân viên từ chuỗi sang số
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Mã nhân viên không hợp lệ! Vui lòng nhập số.");
+            return;
+        }
 
+        String checkEmployeeSql = "SELECT COUNT(*) FROM NhanVien WHERE ID = ?";
+        try (PreparedStatement checkPs = connection.prepareStatement(checkEmployeeSql)) {
+            checkPs.setInt(1, employeeId);
+            ResultSet rs = checkPs.executeQuery();
+            if (rs.next() && rs.getInt(1) == 0) { // Nếu không tìm thấy nhân viên
+                JOptionPane.showMessageDialog(null, "Không có nhân viên này!");
+                return;
+            }
+        }
             // Create invoice
             String invoiceSql = "INSERT INTO HoaDon (MaHoaDon, IDKhachHang, IDNhanVien, NgayTao, TrangThai, TongTien) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -1428,19 +1533,18 @@ public class BanHangView extends javax.swing.JFrame {
         }
     }
 
-    private void capNhatTongTienChoHoaDon() {
-        if (maHoaDonHienTai == null) {
-            JOptionPane.showMessageDialog(null, "Chưa chọn hóa đơn để cập nhật tổng tiền!");
-            return;
-        }
-
-        // Tính tổng tiền từ tblHoaDonChiTiet
-        BigDecimal tongTien = tinhTongTienTuTblHoaDonChiTiet();
-
-        // Lưu tổng tiền vào bảng HoaDon
-        luuTongTienVaoHoaDon(tongTien, maHoaDonHienTai);
+private void capNhatTongTienChoHoaDon() {
+    if (maHoaDonHienTai == null) {
+        JOptionPane.showMessageDialog(null, "Chưa chọn hóa đơn để cập nhật tổng tiền!");
+        return;
     }
 
+    // Tính tổng tiền từ tblHoaDonChiTiet
+    BigDecimal tongTien = tinhTongTienTuTblHoaDonChiTiet();
+
+    // Lưu tổng tiền vào bảng HoaDon
+    luuTongTienVaoHoaDon(tongTien, maHoaDonHienTai);
+}
     private void tinhTienDu() {
         try {
             // Get the values from the text fields
