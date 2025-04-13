@@ -822,7 +822,7 @@ public class BanHangView extends javax.swing.JFrame {
                 String maSP = tblSanPham.getValueAt(row, 1).toString(); // Mã sản phẩm
                 String tenSP = tblSanPham.getValueAt(row, 2).toString(); // Tên sản phẩm
                 BigDecimal donGia = new BigDecimal(tblSanPham.getValueAt(row, 4).toString()); // Giá bán
-                Integer soLuongTon = (Integer) tblSanPham.getValueAt(row, 5); // Tên sản phẩm
+                    Integer soLuongTon = (Integer) tblSanPham.getValueAt(row, 5); // Tên sản phẩm
                 // Prompt for the quantity
                 String soLuongStr = JOptionPane.showInputDialog("Nhập số lượng cho sản phẩm: " + tenSP);
                 if (soLuongStr == null || soLuongStr.trim().isEmpty()) {
