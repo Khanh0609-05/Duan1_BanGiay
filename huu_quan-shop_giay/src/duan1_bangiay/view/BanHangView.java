@@ -711,9 +711,8 @@ public class BanHangView extends javax.swing.JFrame {
 
                 if (rowsAffected > 0) {
                     connection.commit(); // Xác nhận transaction
-                    loadTables(); // Tải lại bảng dữ liệu
-                    clearGioHang();
-                    clearTextFields();
+                    
+                    btnLamMoiActionPerformed(evt);
                 } else {
                     connection.rollback(); // Quay lại nếu không xóa được
                     JOptionPane.showMessageDialog(null, "Không tìm thấy đơn hàng để xóa!");
