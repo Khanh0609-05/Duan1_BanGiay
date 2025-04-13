@@ -822,7 +822,7 @@ public class BanHangView extends javax.swing.JFrame {
                 String maSP = tblSanPham.getValueAt(row, 1).toString(); // Mã sản phẩm
                 String tenSP = tblSanPham.getValueAt(row, 2).toString(); // Tên sản phẩm
                 BigDecimal donGia = new BigDecimal(tblSanPham.getValueAt(row, 4).toString()); // Giá bán
-
+                Integer soLuongTon = (Integer) tblSanPham.getValueAt(row, 5); // Tên sản phẩm
                 // Prompt for the quantity
                 String soLuongStr = JOptionPane.showInputDialog("Nhập số lượng cho sản phẩm: " + tenSP);
                 if (soLuongStr == null || soLuongStr.trim().isEmpty()) {
@@ -836,7 +836,10 @@ public class BanHangView extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0!");
                     return;
                 }
-
+                if (soLuong > soLuongTon) {
+                    JOptionPane.showMessageDialog(null, "Không thể thêm sản phẩm \"" + tenSP + "\". Số lượng tồn kho chỉ còn: " + soLuongTon);
+                    return;
+                }
                 // Check if the product already exists in the invoice details
                 boolean productExists = checkProductExistsInInvoice(maHoaDonHienTai, maSP);
 
@@ -1435,7 +1438,7 @@ public class BanHangView extends javax.swing.JFrame {
 
         try (Connection connection = DBConnect.getConnection()) {
             // Kiểm tra xem khách hàng đã tồn tại chưa, nếu chưa thì thêm mới
-            int customerId = fetchCustomerId(soDienThoai); // Lấy ID khách hàng dựa trên số điện thoại
+            int customerId = timSdtKhachHang(soDienThoai); // Lấy ID khách hàng dựa trên số điện thoại
             if (customerId == -1) {
                 // Nếu khách hàng chưa tồn tại, thêm mới vào bảng KhachHang
                 String customerSql = "INSERT INTO KhachHang (SDT, TenKhachHang, GioiTinh) VALUES (?, ?, ?)";
@@ -1494,7 +1497,7 @@ public class BanHangView extends javax.swing.JFrame {
 
 // Helper method to fetch customer ID from the database
 // Helper to fetch Customer ID from database
-    private int fetchCustomerId(String soDienThoai) throws SQLException {
+    private int timSdtKhachHang(String soDienThoai) throws SQLException {
         String sql = "SELECT ID FROM KhachHang WHERE SDT = ?";
         try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
 
