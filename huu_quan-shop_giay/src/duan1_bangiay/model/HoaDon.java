@@ -5,33 +5,28 @@ import java.time.LocalDateTime;
 
 public class HoaDon {
 
-    private int id; // Primary key
-    private int idNhanVien; // Foreign key
-    private int idKhachHang; // Foreign key
-    private int idPhieuGiamGia; // Foreign key
-    private String maHoaDon; // Unique identifier
-    private String maNhanVien; // New field for employee code
-    private String maKhachHang; // New field for customer code
-    private BigDecimal tongTien; // Total amount
-    private BigDecimal giamGia; // Discount
-    private LocalDateTime ngayTao; // Creation date
-    private BigDecimal thanhTien; // Final amount
-    private boolean trangThai; // Status (active/inactive)
+    private int id; // ID của hóa đơn (thêm để lưu trữ ID của hóa đơn)
+    private int idPhieuGiamGia; // Foreign key - ID phiếu giảm giá
+    private String maHoaDon; // Mã hóa đơn (Unique identifier)
+    private String maNhanVien; // Mã nhân viên tạo hóa đơn
+    private String maKhachHang; // Mã khách hàng
+    private BigDecimal tongTien; // Tổng tiền của hóa đơn
+    private BigDecimal giamGia; // Giảm giá
+    private LocalDateTime ngayTao; // Ngày tạo hóa đơn
+    private BigDecimal thanhTien; // Số tiền cuối cùng sau giảm giá
+    private boolean trangThai; // Trạng thái hóa đơn (chưa thanh toán/đã thanh toán)
 
     // Constructors
     public HoaDon() {
     }
 
-    public HoaDon(int id, int idNhanVien, int idKhachHang, int idPhieuGiamGia, String maHoaDon, String maNhanVien,
-            String maKhachHang, BigDecimal tongTien, BigDecimal giamGia, LocalDateTime ngayTao, BigDecimal thanhTien,
-            boolean trangThai) {
+    public HoaDon(int id, int idPhieuGiamGia, String maHoaDon, String maNhanVien, String maKhachHang,
+                  BigDecimal tongTien, BigDecimal giamGia, LocalDateTime ngayTao, BigDecimal thanhTien, boolean trangThai) {
         this.id = id;
-        this.idNhanVien = idNhanVien;
-        this.idKhachHang = idKhachHang;
         this.idPhieuGiamGia = idPhieuGiamGia;
         this.maHoaDon = maHoaDon;
-        this.maNhanVien = maNhanVien; // Initialize new field
-        this.maKhachHang = maKhachHang; // Initialize new field
+        this.maNhanVien = maNhanVien;
+        this.maKhachHang = maKhachHang;
         this.tongTien = tongTien;
         this.giamGia = giamGia;
         this.ngayTao = ngayTao;
@@ -46,22 +41,6 @@ public class HoaDon {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getIdNhanVien() {
-        return idNhanVien;
-    }
-
-    public void setIdNhanVien(int idNhanVien) {
-        this.idNhanVien = idNhanVien;
-    }
-
-    public int getIdKhachHang() {
-        return idKhachHang;
-    }
-
-    public void setIdKhachHang(int idKhachHang) {
-        this.idKhachHang = idKhachHang;
     }
 
     public int getIdPhieuGiamGia() {
@@ -80,19 +59,19 @@ public class HoaDon {
         this.maHoaDon = maHoaDon;
     }
 
-    public String getMaNhanVien() { // New getter
+    public String getMaNhanVien() {
         return maNhanVien;
     }
 
-    public void setMaNhanVien(String maNhanVien) { // New setter
+    public void setMaNhanVien(String maNhanVien) {
         this.maNhanVien = maNhanVien;
     }
 
-    public String getMaKhachHang() { // New getter
+    public String getMaKhachHang() {
         return maKhachHang;
     }
 
-    public void setMaKhachHang(String maKhachHang) { // New setter
+    public void setMaKhachHang(String maKhachHang) {
         this.maKhachHang = maKhachHang;
     }
 
@@ -140,12 +119,10 @@ public class HoaDon {
     public String toString() {
         return "HoaDon{" +
                 "id=" + id +
-                ", idNhanVien=" + idNhanVien +
-                ", idKhachHang=" + idKhachHang +
                 ", idPhieuGiamGia=" + idPhieuGiamGia +
                 ", maHoaDon='" + maHoaDon + '\'' +
-                ", maNhanVien='" + maNhanVien + '\'' + // Include new field in string representation
-                ", maKhachHang='" + maKhachHang + '\'' + // Include new field in string representation
+                ", maNhanVien='" + maNhanVien + '\'' +
+                ", maKhachHang='" + maKhachHang + '\'' +
                 ", tongTien=" + tongTien +
                 ", giamGia=" + giamGia +
                 ", ngayTao=" + ngayTao +

@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/laptopducvuong.com/Desktop/Duan1_BanGiay/huu_quan-shop_giay/src/duan1_bangiay/repository/HoaDonRepository.java</file>
-            <file>file:/C:/Users/laptopducvuong.com/Desktop/Duan1_BanGiay/huu_quan-shop_giay/src/duan1_bangiay/repository/SanPhamRepository.java</file>
-            <file>file:/C:/Users/laptopducvuong.com/Desktop/Duan1_BanGiay/huu_quan-shop_giay/src/duan1_bangiay/repository/PhieuGiamGiaRepository.java</file>
-            <file>file:/C:/Users/laptopducvuong.com/Desktop/Duan1_BanGiay/huu_quan-shop_giay/src/duan1_bangiay/view/BanHangView.java</file>
-            <file>file:/C:/Users/laptopducvuong.com/Desktop/Duan1_BanGiay/huu_quan-shop_giay/src/duan1_bangiay/repository/HoaDonChiTietRepository.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/model/PhieuGiamGia.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/view/BanHangView.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/model/SanPham.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/model/ChiTietHoaDon.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/model/HoaDon.java</file>
+            <file>file:/C:/Users/quanr/Documents/Zalo%20Received%20Files/huu_quan-shop_giay/src/duan1_bangiay/utils/DBConnect.java</file>
         </group>
     </open-files>
 </project-private>

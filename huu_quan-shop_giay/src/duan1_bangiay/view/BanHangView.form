@@ -50,14 +50,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="btnTaoDon" min="-2" pref="114" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnThanhToan" min="-2" pref="114" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnInBill" min="-2" pref="114" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnHuyDon1" min="-2" pref="114" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="516" max="-2" attributes="0"/>
                               <Component id="btnHuyDon" min="-2" pref="114" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanel2" min="-2" pref="620" max="-2" attributes="0"/>
@@ -87,6 +80,15 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="tblHoaDon" min="-2" pref="620" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnTaoDon" min="-2" pref="114" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="btnThanhToan" min="-2" pref="114" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnInBill" min="-2" pref="114" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnLamMoi" min="-2" pref="114" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -124,19 +126,17 @@
                       </Group>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="9" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="btnLamMoi" alignment="0" min="-2" pref="41" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnInBill" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
+                              <Component id="btnHuyDon" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                               <Component id="btnThanhToan" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                               <Component id="btnTaoDon" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnHuyDon" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
-                              <Component id="btnHuyDon1" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -830,19 +830,19 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblTongTien">
     </Component>
-    <Component class="javax.swing.JButton" name="btnHuyDon1">
+    <Component class="javax.swing.JButton" name="btnLamMoi">
       <Properties>
         <Property name="text" type="java.lang.String" value="L&#xc0;M M&#x1eda;I"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
             <LineBorder>
-              <Color PropertyName="color" blue="0" green="cc" red="33" type="rgb"/>
+              <Color PropertyName="color" blue="33" green="ff" red="0" type="rgb"/>
             </LineBorder>
           </Border>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHuyDon1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLamMoiActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
