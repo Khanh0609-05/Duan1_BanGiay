@@ -46,44 +46,57 @@ public class SanPhamRepository {
         return dataList;
     }
 
-    public List<Object[]> searchSanPham(String keyword) {
-        List<Object[]> searchResults = new ArrayList<>();
-        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY sp.ID) AS STT, "
-                + "sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, "
-                + "ctp.DonGia AS GiaBan, ctp.SoLuong, kt.TenKT AS Size, ms.TenMS AS MauSac "
-                + "FROM SanPham sp "
-                + "JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID "
-                + "JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID "
-                + "JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID "
-                + "JOIN MauSac ms ON ctp.IDMauSac = ms.ID "
-                + "WHERE sp.MaSanPham LIKE ? OR sp.TenSanPham LIKE ?";
+public List<Object[]> searchSanPham(String keyword) {
+    List<Object[]> searchResults = new ArrayList<>();
+    String sql = "SELECT ROW_NUMBER() OVER (ORDER BY sp.ID) AS STT, "
+            + "sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, "
+            + "ctp.DonGia AS GiaBan, ctp.SoLuong, kt.TenKT AS Size, ms.TenMS AS MauSac "
+            + "FROM SanPham sp "
+            + "JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID "
+            + "JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID "
+            + "JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID "
+            + "JOIN MauSac ms ON ctp.IDMauSac = ms.ID "
+            + "WHERE sp.MaSanPham LIKE ? "
+            + "OR sp.TenSanPham LIKE ? "
+            + "OR th.TenTH LIKE ? "
+            + "OR CAST(ctp.DonGia AS NVARCHAR(50)) LIKE ? "
+            + "OR CAST(ctp.SoLuong AS NVARCHAR(50)) LIKE ? "
+            + "OR kt.TenKT LIKE ? "
+            + "OR ms.TenMS LIKE ?";
 
-        try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+    try (Connection connection = DBConnect.getConnection(); 
+         PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            // Use wildcard to perform partial matches
-            ps.setString(1, "%" + keyword + "%");
-            ps.setString(2, "%" + keyword + "%");
+        // Use wildcard to perform partial matches for all fields
+        String searchPattern = "%" + keyword + "%";
+        ps.setString(1, searchPattern); // MaSanPham
+        ps.setString(2, searchPattern); // TenSanPham
+        ps.setString(3, searchPattern); // ThuongHieu
+        ps.setString(4, searchPattern); // GiaBan (DonGia)
+        ps.setString(5, searchPattern); // SoLuong
+        ps.setString(6, searchPattern); // Size (TenKT)
+        ps.setString(7, searchPattern); // MauSac (TenMS)
 
-            ResultSet rs = ps.executeQuery();
+        ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Object[] row = new Object[]{
-                    rs.getInt("STT"), // Serial Number
-                    rs.getString("MaSanPham"), // Product Code
-                    rs.getString("TenSanPham"), // Product Name
-                    rs.getString("ThuongHieu"), // Brand
-                    rs.getBigDecimal("GiaBan"), // Price
-                    rs.getInt("SoLuong"), // Quantity
-                    rs.getString("Size"), // Size
-                    rs.getString("MauSac") // Color
-                };
-                searchResults.add(row);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            Object[] row = new Object[]{
+                rs.getInt("STT"),           // Serial Number
+                rs.getString("MaSanPham"),  // Product Code
+                rs.getString("TenSanPham"), // Product Name
+                rs.getString("ThuongHieu"), // Brand
+                rs.getBigDecimal("GiaBan"), // Price
+                rs.getInt("SoLuong"),       // Quantity
+                rs.getString("Size"),       // Size
+                rs.getString("MauSac")      // Color
+            };
+            searchResults.add(row);
         }
 
-        return searchResults;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return searchResults;
+}
 }
