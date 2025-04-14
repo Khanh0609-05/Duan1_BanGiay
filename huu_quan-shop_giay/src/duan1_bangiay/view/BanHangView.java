@@ -187,7 +187,7 @@ public class BanHangView extends javax.swing.JFrame {
         try {
             DefaultTableModel sourceModel = (DefaultTableModel) sourceTable.getModel();
             maHoaDonHienTai = sourceModel.getValueAt(selectedRow, 0).toString(); // Lấy mã hóa đơn hiện tại
-            System.out.println("Mã Hóa Đơn Hiện Tại: " + maHoaDonHienTai);
+            
 
             // Cập nhật bảng tblHoaDonChiTiet
             capNhatChiTietHoaDon(maHoaDonHienTai);
@@ -1466,8 +1466,13 @@ public class BanHangView extends javax.swing.JFrame {
             return;
         }
         
-        
-        
+        // Kiểm tra số điện thoại: chỉ kiểm tra nếu người dùng đã nhập
+    if (!soDienThoai.isEmpty()) { // Nếu có nhập số điện thoại
+        if (!soDienThoai.matches("\\d+")) { // Kiểm tra xem chỉ chứa số 0-9
+            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa các chữ số (0-9)!");
+            return;
+        }
+    }
 
         try (Connection connection = DBConnect.getConnection()) {
             // Kiểm tra xem khách hàng đã tồn tại chưa, nếu chưa thì thêm mới
