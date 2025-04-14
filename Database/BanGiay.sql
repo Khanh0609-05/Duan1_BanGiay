@@ -1,11 +1,11 @@
-﻿-- Kiểm tra và xóa database nếu tồn tại
+﻿
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'BanHangTaiQuay1')
 BEGIN
     DROP DATABASE BanHangTaiQuay1
 END
 GO
 
--- Tạo database mới
+
 CREATE DATABASE BanHangTaiQuay1
 GO
 
@@ -14,19 +14,18 @@ GO
 
 
 CREATE TABLE ChucVu (
-    ID INT IDENTITY(1,1) PRIMARY KEY, -- bắt đầu 1 và tiếp tục tăng 1
-    MaChucVu NVARCHAR(50) NOT NULL UNIQUE, -- bắt buộc điềm và là duy nhất
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    MaChucVu NVARCHAR(50) NOT NULL UNIQUE,
     TenChucVu NVARCHAR(255) NOT NULL
 );
 GO
 
--- 2. NhanVien
 CREATE TABLE NhanVien (
-    ID INT IDENTITY(1,1) PRIMARY KEY, -- bắt đầu 1 và tiếp tục tăng 1
-    MaNhanVien NVARCHAR(50) UNIQUE, --là duy nhất
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    MaNhanVien NVARCHAR(50) UNIQUE,
     TenNhanVien NVARCHAR(255),
-    NgaySinh DATETIME, -- cập nhật cả ngày và giờ
-    SDT VARCHAR(20) CHECK (SDT LIKE '[0-9]%') UNIQUE, -- 1 số điện thoại chỉ có thể có 1  nhân viên
+    NgaySinh DATETIME,
+    SDT VARCHAR(20) CHECK (SDT LIKE '[0-9]%') UNIQUE,
     GioiTinh BIT DEFAULT 1,
     QueQuan NVARCHAR(255),
     MatKhau NVARCHAR(255),
@@ -35,8 +34,6 @@ CREATE TABLE NhanVien (
 );
 GO
 
-
--- 3. KhachHang
 CREATE TABLE KhachHang (
     ID INT IDENTITY(1,1) PRIMARY KEY,
 	MaKhachHang NVARCHAR(50) UNIQUE,
@@ -48,7 +45,6 @@ CREATE TABLE KhachHang (
 );
 GO
 
--- 4. ThuongHieu
 CREATE TABLE ThuongHieu (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaTH NVARCHAR(50) NOT NULL UNIQUE,
@@ -57,8 +53,6 @@ CREATE TABLE ThuongHieu (
 );
 GO
 
-
--- 5. MauSac
 CREATE TABLE MauSac (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaMS NVARCHAR(50) NOT NULL UNIQUE,
@@ -69,7 +63,6 @@ GO
 
 
 
--- 6. KichThuoc
 CREATE TABLE KichThuoc (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaKT NVARCHAR(50) NOT NULL UNIQUE,
@@ -82,7 +75,6 @@ GO
 
 
 
--- 7. ChiTietSanPham
 CREATE TABLE ChiTietSanPham (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     IDThuongHieu INT FOREIGN KEY REFERENCES ThuongHieu(ID),
@@ -95,7 +87,6 @@ CREATE TABLE ChiTietSanPham (
 GO
 
 
--- 8. SanPham
 CREATE TABLE SanPham (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaSanPham NVARCHAR(50) UNIQUE,
@@ -106,7 +97,7 @@ CREATE TABLE SanPham (
 GO
 
 
--- 9. PhieuGiamGia
+
 CREATE TABLE PhieuGiamGia (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     MaPhieuGiamGia nvarchar(50) NULL,
@@ -125,7 +116,6 @@ CREATE TABLE PhieuGiamGia (
 GO
 
 
--- 10. HoaDon
 CREATE TABLE HoaDon (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     IDNhanVien INT FOREIGN KEY REFERENCES NhanVien(ID),
@@ -141,7 +131,7 @@ CREATE TABLE HoaDon (
 GO
 
 
--- 11. ChiTietHoaDon
+
 CREATE TABLE ChiTietHoaDon (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     IDSanPham INT FOREIGN KEY REFERENCES SanPham(ID),
