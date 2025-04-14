@@ -1,7 +1,6 @@
 ﻿-- Kiểm tra và xóa database nếu tồn tại
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'BanHangTaiQuay1')
 BEGIN
-    DROP DATABASE BanHangTaiQuay
     DROP DATABASE BanHangTaiQuay1
 END
 GO
