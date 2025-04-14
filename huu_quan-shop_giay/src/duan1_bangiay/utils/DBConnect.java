@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class DBConnect {
     private static String USERNAME ="sa";
     private static String PASSWORD = "123456";
-    private static String URL ="jdbc:sqlserver://localhost:1433;databaseName=BanHangTaiQuay;encrypt=true;trustServerCertificate=true;";
+    private static String URL ="jdbc:sqlserver://localhost:1433;databaseName=BanHangTaiQuay1;encrypt=true;trustServerCertificate=true;";
     
     static {
         try {
