@@ -1215,23 +1215,25 @@ try {
     }//GEN-LAST:event_tblChuaThanhToanMouseClicked
 
     private void tblHoaDonChiTietMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonChiTietMouseClicked
-
-        if (maHoaDonHienTai == null) {
+if (maHoaDonHienTai == null) {
             JOptionPane.showMessageDialog(null, "Chưa chọn hóa đơn!");
-            return;
+            return; // Thoát nếu chưa chọn hóa đơn
         }
 
+        // Kiểm tra xem hóa đơn đã thanh toán chưa
         if (kiemTraTrangThaiHoaDon(maHoaDonHienTai)) {
             JOptionPane.showMessageDialog(null, "Hóa đơn đã thanh toán, không thể chỉnh sửa sản phẩm!");
-            return;
+            return; // Thoát nếu hóa đơn đã thanh toán
         }
 
         int row = tblHoaDonChiTiet.getSelectedRow();
         if (row != -1) {
             try {
-                String tenHangHoa = tblHoaDonChiTiet.getValueAt(row, 1).toString();
-                int soLuongHienTai = Integer.parseInt(tblHoaDonChiTiet.getValueAt(row, 3).toString());
+                // Lấy thông tin sản phẩm từ hàng được chọn
+                String tenHangHoa = tblHoaDonChiTiet.getValueAt(row, 1).toString(); // Tên sản phẩm
+                int soLuongHienTai = Integer.parseInt(tblHoaDonChiTiet.getValueAt(row, 3).toString()); // Số lượng hiện tại
 
+                // Hiển thị hộp thoại với hai tùy chọn
                 Object[] options = {"Xóa sản phẩm", "Cập nhật số lượng"};
                 int choice = JOptionPane.showOptionDialog(null,
                         "Bạn muốn làm gì với sản phẩm \"" + tenHangHoa + "\"?",
@@ -1242,28 +1244,40 @@ try {
                         options,
                         options[0]);
 
+                // Lấy ID sản phẩm
                 int idSanPham = getIdSanPhamFromTenSanPham(tenHangHoa);
                 if (idSanPham == -1) {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm!");
                     return;
                 }
 
+                // Lấy số lượng tồn kho hiện tại
                 int soLuongTonKho = getSoLuongTonKho(idSanPham);
+                // Tính số lượng tồn kho khả dụng (trừ đi số lượng đã có trong hóa đơn hiện tại)
                 int soLuongKhaDung = soLuongTonKho + soLuongHienTai;
 
-                if (choice == 0) {
+                // Xử lý tùy chọn
+                if (choice == 0) { // Xóa sản phẩm
+                    // Xác nhận xóa
                     int confirm = JOptionPane.showConfirmDialog(null,
                             "Bạn có chắc chắn muốn xóa sản phẩm \"" + tenHangHoa + "\" khỏi giỏ hàng?",
                             "Xác nhận xóa sản phẩm", JOptionPane.YES_NO_OPTION);
                     if (confirm != JOptionPane.YES_OPTION) {
-                        return;
+                        return; // Thoát nếu người dùng hủy
                     }
 
+                    // Xóa sản phẩm khỏi chi tiết hóa đơn
                     xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
+
+                    // Tăng lại số lượng trong kho
                     capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuongHienTai);
+
+                    // Cập nhật bảng chi tiết hóa đơn và tổng tiền
                     capNhatChiTietHoaDon(maHoaDonHienTai);
                     capNhatTongTienChoHoaDon();
-                } else if (choice == 1) {
+
+                } else if (choice == 1) { // Cập nhật số lượng
+                    // Yêu cầu nhập số lượng mới
                     String soLuongMoiStr = JOptionPane.showInputDialog(null,
                             "Nhập số lượng mới cho sản phẩm \"" + tenHangHoa + "\":",
                             soLuongHienTai);
@@ -1272,40 +1286,50 @@ try {
                         return;
                     }
 
+                    // Phân tích và kiểm tra số lượng mới
                     int soLuongMoi = Integer.parseInt(soLuongMoiStr.trim());
                     if (soLuongMoi < 0) {
                         JOptionPane.showMessageDialog(null, "Số lượng không được âm!");
                         return;
                     }
 
+                    // Kiểm tra số lượng mới có vượt quá số lượng tồn kho khả dụng hay không
                     if (soLuongMoi > soLuongKhaDung) {
                         JOptionPane.showMessageDialog(null, "Số lượng nhập vượt quá số lượng tồn kho khả dụng! Tồn kho hiện tại: " + soLuongKhaDung);
                         return;
                     }
 
                     if (soLuongMoi == 0) {
+                        // Nếu số lượng mới là 0, xóa sản phẩm
                         xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
                         capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuongHienTai);
                         JOptionPane.showMessageDialog(null,
                                 "Số lượng bằng 0, sản phẩm \"" + tenHangHoa + "\" đã được xóa khỏi giỏ hàng!");
                     } else {
+                        // Cập nhật số lượng trong chi tiết hóa đơn
                         capNhatSoLuongSanPhamTrongChiTietHoaDon(maHoaDonHienTai, tenHangHoa, soLuongMoi);
+
+                        // Điều chỉnh số lượng trong kho
                         int soLuongThayDoi = soLuongMoi - soLuongHienTai;
                         if (soLuongThayDoi > 0) {
+                            // Giảm số lượng trong kho
                             capNhatSoLuongSanPham(idSanPham, soLuongThayDoi);
                         } else if (soLuongThayDoi < 0) {
+                            // Tăng số lượng trong kho
                             capNhatSoLuongSanPhamSetQuantity(idSanPham, -soLuongThayDoi);
                         }
+
                     }
 
+                    // Cập nhật bảng chi tiết hóa đơn và tổng tiền
                     capNhatChiTietHoaDon(maHoaDonHienTai);
                     capNhatTongTienChoHoaDon();
                 }
 
-                // Chỉ làm mới tblSanPham
-                DefaultTableModel modelSanPham = (DefaultTableModel) tblSanPham.getModel();
+                // Làm mới danh sách sản phẩm
                 SanPhamRepository sanPhamRepository = new SanPhamRepository();
-                fillToTableSanPham(modelSanPham, sanPhamRepository.getAllSanPham());
+                sanPhamRepository.getAllSanPham();
+                loadTables();
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ! Vui lòng nhập số nguyên.");
