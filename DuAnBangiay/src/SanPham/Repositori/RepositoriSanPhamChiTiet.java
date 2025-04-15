@@ -153,19 +153,21 @@ public class RepositoriSanPhamChiTiet {
     //Them tim kiem san pham
     public List<Object[]> searchSanPham(String keyword) {
         List<Object[]> searchResults = new ArrayList<>();
-        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY sp.ID) AS STT, "
-                + "sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, "
-                + "ctp.DonGia AS GiaBan, ctp.SoLuong, kt.TenKT AS Size, ms.TenMS AS MauSac "
-                + "FROM SanPham sp "
-                + "JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID "
-                + "JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID "
-                + "JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID "
-                + "JOIN MauSac ms ON ctp.IDMauSac = ms.ID "
-                + "WHERE sp.MaSanPham LIKE ? OR sp.TenSanPham LIKE ?";
+        String sql = """
+        SELECT sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, 
+               ms.TenMS AS MauSac, kt.TenKT AS KichThuoc, 
+               ctp.SoLuong, ctp.DonGia, ctp.TrangThai
+        FROM SanPham sp
+        JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID
+        JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID
+        JOIN MauSac ms ON ctp.IDMauSac = ms.ID
+        JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID
+        WHERE sp.MaSanPham LIKE ? OR sp.TenSanPham LIKE ?
+    """;
 
         try (Connection connection = DBconnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            // Use wildcard to perform partial matches
+            // Sử dụng ký tự đại diện để tìm kiếm một phần
             ps.setString(1, "%" + keyword + "%");
             ps.setString(2, "%" + keyword + "%");
 
@@ -173,14 +175,15 @@ public class RepositoriSanPhamChiTiet {
 
             while (rs.next()) {
                 Object[] row = new Object[]{
-                    rs.getInt("STT"), // Serial Number
-                    rs.getString("MaSanPham"), // Product Code
-                    rs.getString("TenSanPham"), // Product Name
-                    rs.getString("ThuongHieu"), // Brand
-                    rs.getBigDecimal("GiaBan"), // Price
-                    rs.getInt("SoLuong"), // Quantity
-                    rs.getString("Size"), // Size
-                    rs.getString("MauSac") // Color
+                    rs.getString("MaSanPham"), // Mã sản phẩm
+                    rs.getString("TenSanPham"), // Tên sản phẩm
+                    rs.getInt("SoLuong"), // Số lượng
+                    rs.getString("ThuongHieu"), // Tên thương hiệu
+                    rs.getString("MauSac"), // Tên màu sắc
+                    rs.getString("KichThuoc"), // Tên kích thước
+                    
+                    rs.getDouble("DonGia"), // Đơn giá (double, khớp với model)
+                    rs.getBoolean("TrangThai") ? "Còn Bán" : "Ngừng Bán" // Trạng thái
                 };
                 searchResults.add(row);
             }
@@ -253,9 +256,9 @@ public class RepositoriSanPhamChiTiet {
 
     //them update 
     public boolean updateSanPham(String maSanPham, String tenSanPham, int idThuongHieu,
-            int idMauSac, int idKichThuoc, int soLuong, BigDecimal donGia) {
+            int idMauSac, int idKichThuoc, int soLuong, BigDecimal donGia, boolean TrangThai) {
         String sqlChiTietSanPham = "UPDATE ChiTietSanPham SET IDThuongHieu = ?, IDMauSac = ?, IDKichThuoc = ?, "
-                + "SoLuong = ?, DonGia = ? WHERE ID = (SELECT IDChiTietSanPham FROM SanPham WHERE MaSanPham = ?)";
+                + "SoLuong = ?, DonGia = ?, TrangThai = ? WHERE ID = (SELECT IDChiTietSanPham FROM SanPham WHERE MaSanPham = ?)";
         String sqlSanPham = "UPDATE SanPham SET TenSanPham = ? WHERE MaSanPham = ?";
 
         try (Connection connection = DBconnect.getConnection()) {
@@ -269,7 +272,8 @@ public class RepositoriSanPhamChiTiet {
                 psChiTiet.setInt(3, idKichThuoc); // Cập nhật kích thước
                 psChiTiet.setInt(4, soLuong);     // Cập nhật số lượng
                 psChiTiet.setBigDecimal(5, donGia); // Cập nhật đơn giá
-                psChiTiet.setString(6, maSanPham); // Điều kiện dựa vào mã sản phẩm
+                psChiTiet.setBoolean(6, TrangThai);
+                psChiTiet.setString(7, maSanPham); // Điều kiện dựa vào mã sản phẩm
 
                 int affectedRowsChiTiet = psChiTiet.executeUpdate();
                 if (affectedRowsChiTiet == 0) {
@@ -320,28 +324,26 @@ public class RepositoriSanPhamChiTiet {
             return false; // Trả về false nếu có lỗi
         }
     }
-    
-    
+
     public boolean checkTrungTenSPCT(String tenSanPham) {
-    String sql = """
+        String sql = """
         SELECT COUNT(*) 
         FROM SanPham 
         WHERE TenSanPham = ?
     """;
-    
-    try (Connection con = DBconnect.getConnection(); 
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        
-        ps.setString(1, tenSanPham.trim());
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            return rs.getInt(1) > 0; // Returns true if a matching name exists
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, tenSanPham.trim());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Returns true if a matching name exists
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return false; // Default to false if an error occurs
     }
-    return false; // Default to false if an error occurs
-}
-    
+
 }

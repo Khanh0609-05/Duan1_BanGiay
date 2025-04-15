@@ -14,6 +14,7 @@ import SanPham.Model.ModelThuongHieu;
 import SanPham.Repositori.RepositoriThuongHieu;
 import SanPham.Until.DBconnect;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.text.DecimalFormat;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -56,6 +59,22 @@ public class SanPhamView extends javax.swing.JFrame {
         this.loadComboBoxData();
         //them tim kiem
         searchListener();
+        tbl_spct.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+            private final DecimalFormat df = new DecimalFormat("#,### VĐN");
+
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                if (value != null) {
+                    try {
+                        BigDecimal donGia = new BigDecimal(value.toString());
+                        value = df.format(donGia);
+                    } catch (NumberFormatException e) {
+                        // Nếu không parse được, giữ nguyên giá trị
+                    }
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
     }
 
     void fillTableTH(ArrayList<ModelThuongHieu> list) {//b1 gọi model cho bảng
@@ -297,6 +316,12 @@ public class SanPhamView extends javax.swing.JFrame {
 
         jLabel20.setText("Tìm Kiếm: ");
 
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -408,7 +433,7 @@ public class SanPhamView extends javax.swing.JFrame {
                     .addComponent(rdo_ngungban)
                     .addComponent(jLabel19)
                     .addComponent(txt_dongiaspct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_themspct)
                     .addComponent(btn_suacpct)
@@ -416,12 +441,11 @@ public class SanPhamView extends javax.swing.JFrame {
                     .addComponent(btn_lammoispct))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Sản Phẩm Chi Tiết", jPanel1);
+        jTabbedPane1.addTab("Sản Phẩm", jPanel1);
 
         jLabel1.setText("Mã");
 
@@ -515,14 +539,13 @@ public class SanPhamView extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_tenTH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(73, 73, 73)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_themTH)
                     .addComponent(btn_suaTH)
                     .addComponent(btn_lammoiTH))
                 .addGap(52, 52, 52)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Thương hiệu", jPanel2);
@@ -616,8 +639,7 @@ public class SanPhamView extends javax.swing.JFrame {
                     .addComponent(btn_suaMS)
                     .addComponent(btn_lammoiMS))
                 .addGap(44, 44, 44)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Màu Sắc ", jPanel3);
@@ -709,8 +731,8 @@ public class SanPhamView extends javax.swing.JFrame {
                         .addComponent(btn_suaKT)
                         .addComponent(btn_lammoiKT)))
                 .addGap(39, 39, 39)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Kích Thước", jPanel4);
@@ -885,32 +907,66 @@ public class SanPhamView extends javax.swing.JFrame {
             cbo_thuongHieu.setSelectedItem(tbl_spct.getValueAt(i, 3).toString());
             cbo_mauSac.setSelectedItem(tbl_spct.getValueAt(i, 4).toString());
             cbo_kichThuoc.setSelectedItem(tbl_spct.getValueAt(i, 5).toString());
-            txt_dongiaspct.setText(tbl_spct.getValueAt(i, 6).toString());
+
+            // Xử lý đơn giá: loại bỏ ".0" và " VĐN" nếu có
+            String donGiaStr = tbl_spct.getValueAt(i, 6).toString().replace(" VĐN", "").replace(",", "");
+            try {
+                BigDecimal donGia = new BigDecimal(donGiaStr);
+                // Định dạng với dấu phẩy, bỏ phần thập phân .0
+                DecimalFormat df = new DecimalFormat("#,###");
+                txt_dongiaspct.setText(df.format(donGia));
+            } catch (NumberFormatException e) {
+                // Nếu không parse được, giữ nguyên giá trị đã loại bỏ " VĐN"
+                txt_dongiaspct.setText(donGiaStr);
+            }
+            // Xử lý trạng thái
             if (tbl_spct.getValueAt(i, 7).toString().equals("Còn Bán")) {
                 rdo_conban.setSelected(true);
             } else {
                 rdo_ngungban.setSelected(true);
             }
         }
+
     }//GEN-LAST:event_tbl_spctMouseClicked
 
     private void btn_themspctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_themspctActionPerformed
-
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn thêm sản phẩm này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
 
         try {
-            // Lấy thông tin từ giao diện
+            // Lấy thông tin từ giao diện (không trim ngay để kiểm tra khoảng trống)
             txt_maspct.setText("");
             String maSanPham = generateNewMaSanPham();
-            String tenSanPham = txt_tenspct.getText().trim();
-            String thuongHieu = cbo_thuongHieu.getSelectedItem().toString(); // Tên Thương Hiệu
-            String mauSac = cbo_mauSac.getSelectedItem().toString();         // Tên Màu Sắc
-            String kichThuoc = cbo_kichThuoc.getSelectedItem().toString();   // Tên Kích Thước
-            String soLuongStr = txt_soluongspct.getText().trim();
-            String donGiaStr = txt_dongiaspct.getText().trim();
+            String tenSanPhamInput = txt_tenspct.getText();
+            String thuongHieu = cbo_thuongHieu.getSelectedItem() != null ? cbo_thuongHieu.getSelectedItem().toString() : "";
+            String mauSac = cbo_mauSac.getSelectedItem() != null ? cbo_mauSac.getSelectedItem().toString() : "";
+            String kichThuoc = cbo_kichThuoc.getSelectedItem() != null ? cbo_kichThuoc.getSelectedItem().toString() : "";
+            String soLuongStrInput = txt_soluongspct.getText();
+            String donGiaStrInput = txt_dongiaspct.getText();
+
+            // Kiểm tra khoảng trống ở đầu hoặc cuối
+            if (!tenSanPhamInput.equals(tenSanPhamInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Tên sản phẩm không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_tenspct.requestFocus();
+                return;
+            }
+            if (!soLuongStrInput.equals(soLuongStrInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Số lượng không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_soluongspct.requestFocus();
+                return;
+            }
+            if (!donGiaStrInput.equals(donGiaStrInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_dongiaspct.requestFocus();
+                return;
+            }
+
+            // Trim sau khi kiểm tra xong
+            String tenSanPham = tenSanPhamInput.trim();
+            String soLuongStr = soLuongStrInput.trim();
+            String donGiaStr = donGiaStrInput.trim();
 
             // Validate tenSanPham
             if (tenSanPham.isEmpty()) {
@@ -919,12 +975,22 @@ public class SanPhamView extends javax.swing.JFrame {
                 return;
             }
 
-            // Validate and parse soLuong separately
+            // Validate số lượng
+            if (soLuongStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập số lượng");
+                txt_soluongspct.requestFocus();
+                return;
+            }
             int soLuong;
             try {
                 soLuong = Integer.parseInt(soLuongStr);
                 if (soLuong < 0) {
                     JOptionPane.showMessageDialog(this, "Số lượng không được âm");
+                    txt_soluongspct.requestFocus();
+                    return;
+                }
+                if (soLuong > 999) {
+                    JOptionPane.showMessageDialog(this, "Số lượng không được vượt quá 999");
                     txt_soluongspct.requestFocus();
                     return;
                 }
@@ -934,23 +1000,37 @@ public class SanPhamView extends javax.swing.JFrame {
                 return;
             }
 
-            // Validate and parse donGia separately
+            // Validate đơn giá
+            if (donGiaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập đơn giá");
+                txt_dongiaspct.requestFocus();
+                return;
+            }
+            // Validate đơn giá (có dấu phẩy)
             BigDecimal donGia;
             try {
-                donGia = new BigDecimal(donGiaStr);
+                String donGiaStrCleaned = donGiaStr.replace(",", "");
+                donGia = new BigDecimal(donGiaStrCleaned);
                 if (donGia.compareTo(BigDecimal.ZERO) < 0) {
                     JOptionPane.showMessageDialog(this, "Đơn giá không được âm");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
+                if (donGia.compareTo(new BigDecimal("10000000")) > 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000");
+                    txt_dongiaspct.requestFocus();
+                    return;
+                }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Đơn giá phải là số hợp lệ");
+                JOptionPane.showMessageDialog(this, "Đơn giá không được chứa chữ và ký tự đặc biệt");
                 txt_dongiaspct.requestFocus();
                 return;
             }
 
-            // Check for duplicate tenSanPham
+            // Khởi tạo repository
             RepositoriSanPhamChiTiet repository = new RepositoriSanPhamChiTiet();
+
+            // Kiểm tra trùng lặp tên sản phẩm
             if (repository.checkTrungTenSPCT(tenSanPham)) {
                 JOptionPane.showMessageDialog(this, "Tên sản phẩm chi tiết đã tồn tại!");
                 txt_tenspct.requestFocus();
@@ -959,11 +1039,11 @@ public class SanPhamView extends javax.swing.JFrame {
 
             // Kiểm tra mã sản phẩm trùng lặp
             if (isMaSanPhamExists(maSanPham)) {
-                JOptionPane.showMessageDialog(this, "Mã Sản Phẩm đã tồn tại. Vui lòng thử lại.");
+                JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại. Vui lòng thử lại.");
                 return;
             }
 
-            // Sử dụng phương thức để lấy ID từ tên
+            // Lấy ID từ tên
             int idThuongHieu = getIdByName(thuongHieu, "ThuongHieu", "TenTH");
             int idMauSac = getIdByName(mauSac, "MauSac", "TenMS");
             int idKichThuoc = getIdByName(kichThuoc, "KichThuoc", "TenKT");
@@ -986,7 +1066,8 @@ public class SanPhamView extends javax.swing.JFrame {
                 for (SanPhamChiTietModel ctsp : list) {
                     model.addRow(ctsp.toDataRowSPCT());
                 }
-                txt_maspct.setText(maSanPham); // Display the newly generated code
+
+                txt_maspct.setText(maSanPham); // Hiển thị mã vừa tạo
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thất bại.");
             }
@@ -994,6 +1075,7 @@ public class SanPhamView extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
         }
+
 
     }//GEN-LAST:event_btn_themspctActionPerformed
     //get masanpham
@@ -1060,20 +1142,72 @@ public class SanPhamView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_lammoispctActionPerformed
 
     private void btn_suacpctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_suacpctActionPerformed
+
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn sửa sản phẩm này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
 
         try {
-            // Lấy thông tin từ giao diện
-            String maSanPham = txt_maspct.getText().trim();
-            String tenSanPham = txt_tenspct.getText().trim();
-            String thuongHieu = cbo_thuongHieu.getSelectedItem().toString();
-            String mauSac = cbo_mauSac.getSelectedItem().toString();
-            String kichThuoc = cbo_kichThuoc.getSelectedItem().toString();
-            String soLuongStr = txt_soluongspct.getText().trim();
-            String donGiaStr = txt_dongiaspct.getText().trim();
+            // Lấy thông tin từ giao diện (không trim ngay để kiểm tra khoảng trống)
+            String maSanPhamInput = txt_maspct.getText();
+            String tenSanPhamInput = txt_tenspct.getText();
+            String thuongHieu = cbo_thuongHieu.getSelectedItem() != null ? cbo_thuongHieu.getSelectedItem().toString() : "";
+            String mauSac = cbo_mauSac.getSelectedItem() != null ? cbo_mauSac.getSelectedItem().toString() : "";
+            String kichThuoc = cbo_kichThuoc.getSelectedItem() != null ? cbo_kichThuoc.getSelectedItem().toString() : "";
+            String soLuongStrInput = txt_soluongspct.getText();
+            String donGiaStrInput = txt_dongiaspct.getText();
+
+            // Kiểm tra khoảng trống ở đầu hoặc cuối
+            if (!maSanPhamInput.equals(maSanPhamInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Mã sản phẩm không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_maspct.requestFocus();
+                return;
+            }
+            if (!tenSanPhamInput.equals(tenSanPhamInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Tên sản phẩm không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_tenspct.requestFocus();
+                return;
+            }
+            if (!soLuongStrInput.equals(soLuongStrInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Số lượng không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_soluongspct.requestFocus();
+                return;
+            }
+            if (!donGiaStrInput.equals(donGiaStrInput.trim())) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được chứa khoảng trống ở đầu hoặc cuối");
+                txt_dongiaspct.requestFocus();
+                return;
+            }
+
+            // Trim sau khi kiểm tra
+            String maSanPham = maSanPhamInput.trim();
+            String tenSanPham = tenSanPhamInput.trim();
+            String soLuongStr = soLuongStrInput.trim();
+            String donGiaStr = donGiaStrInput.trim();
+
+            // Kiểm tra các trường không được để trống
+            if (maSanPham.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập mã sản phẩm");
+                txt_maspct.requestFocus();
+                return;
+            }
+            if (tenSanPham.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên sản phẩm");
+                txt_tenspct.requestFocus();
+                return;
+            }
+
+            if (soLuongStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập số lượng");
+                txt_soluongspct.requestFocus();
+                return;
+            }
+            if (donGiaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập đơn giá");
+                txt_dongiaspct.requestFocus();
+                return;
+            }
 
             // Validate và parse soLuong riêng
             int soLuong;
@@ -1084,18 +1218,29 @@ public class SanPhamView extends javax.swing.JFrame {
                     txt_soluongspct.requestFocus();
                     return;
                 }
+                if (soLuong > 999) {
+                    JOptionPane.showMessageDialog(this, "Số lượng không được vượt quá 999");
+                    txt_soluongspct.requestFocus();
+                    return;
+                }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Số lượng phải là số nguyên hợp lệ");
                 txt_soluongspct.requestFocus();
                 return;
             }
 
-            // Validate và parse donGia riêng
+            // Validate và parse donGia riêng (hỗ trợ dấu phẩy)
             BigDecimal donGia;
             try {
-                donGia = new BigDecimal(donGiaStr);
+                String donGiaStrCleaned = donGiaStr.replace(",", "");
+                donGia = new BigDecimal(donGiaStrCleaned);
                 if (donGia.compareTo(BigDecimal.ZERO) < 0) {
                     JOptionPane.showMessageDialog(this, "Đơn giá không được âm");
+                    txt_dongiaspct.requestFocus();
+                    return;
+                }
+                if (donGia.compareTo(new BigDecimal("9999999")) > 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 9,999,999");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
@@ -1104,6 +1249,9 @@ public class SanPhamView extends javax.swing.JFrame {
                 txt_dongiaspct.requestFocus();
                 return;
             }
+
+            // Lấy trạng thái từ radio button
+            boolean trangThai = rdo_conban.isSelected(); // true: Còn Bán, false: Ngừng Bán
 
             // Lấy ID từ tên
             int idThuongHieu = getIdByName(thuongHieu, "ThuongHieu", "TenTH");
@@ -1115,9 +1263,9 @@ public class SanPhamView extends javax.swing.JFrame {
                 return;
             }
 
-            // Gọi phương thức cập nhật
+            // Gọi phương thức cập nhật (bao gồm trạng thái)
             RepositoriSanPhamChiTiet repository = new RepositoriSanPhamChiTiet();
-            boolean isUpdated = repository.updateSanPham(maSanPham, tenSanPham, idThuongHieu, idMauSac, idKichThuoc, soLuong, donGia);
+            boolean isUpdated = repository.updateSanPham(maSanPham, tenSanPham, idThuongHieu, idMauSac, idKichThuoc, soLuong, donGia, trangThai);
 
             if (isUpdated) {
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!");
@@ -1135,6 +1283,7 @@ public class SanPhamView extends javax.swing.JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage());
         }
+
 
     }//GEN-LAST:event_btn_suacpctActionPerformed
 
@@ -1265,6 +1414,10 @@ public class SanPhamView extends javax.swing.JFrame {
     private void txt_maTHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_maTHActionPerformed
 
     }//GEN-LAST:event_txt_maTHActionPerformed
+
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimKiemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1472,20 +1625,36 @@ public class SanPhamView extends javax.swing.JFrame {
 
     // Đọc dữ liệu từ form 
     ModelThuongHieu readFormTH() {
-        String ma = txt_maTH.getText().trim();
-        String tenTH = txt_tenTH.getText().trim();
+        // Lấy giá trị gốc để kiểm tra khoảng trống
+        String maInput = txt_maTH.getText();
+        String tenTHInput = txt_tenTH.getText();
 
+        // Kiểm tra khoảng trống ở đầu hoặc cuối
+        if (!tenTHInput.equals(tenTHInput.trim())) {
+            JOptionPane.showMessageDialog(this, "Tên thương hiệu không được chứa khoảng trống ở đầu hoặc cuối");
+            txt_tenTH.requestFocus();
+            return null;
+        }
+
+        // Trim sau khi kiểm tra
+        String ma = maInput.trim();
+        String tenTH = tenTHInput.trim();
+
+        // Kiểm tra tên thương hiệu rỗng
         if (tenTH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên thương hiệu");
             txt_tenTH.requestFocus();
             return null;
         }
+
+        // Kiểm tra định dạng tên thương hiệu (chỉ chứa chữ cái và khoảng trống)
         if (!tenTH.matches("[\\p{L}\\s]+")) {
             JOptionPane.showMessageDialog(this, "Tên thương hiệu không được chứa số hoặc ký tự đặc biệt");
+            txt_tenTH.requestFocus();
             return null;
         }
 
-        // Nếu mã rỗng (khi thêm mới), sinh mã tự động
+        // Nếu mã  (khi thêm mới), sinh mã tự động
         if (ma.isEmpty()) {
             ma = generateNewMaTH();
             txt_maTH.setText(ma);
@@ -1495,16 +1664,32 @@ public class SanPhamView extends javax.swing.JFrame {
     }
 
     ModelMauSac readFormMS() {
-        String ma = txt_maMS.getText().trim();
-        String tenMS = txt_tenMS.getText().trim();
+        // Lấy giá trị gốc để kiểm tra khoảng trống
+        String maInput = txt_maMS.getText();
+        String tenMSInput = txt_tenMS.getText();
 
+        // Kiểm tra khoảng trống ở đầu hoặc cuối
+        if (!tenMSInput.equals(tenMSInput.trim())) {
+            JOptionPane.showMessageDialog(this, "Tên màu sắc không được chứa khoảng trống ở đầu hoặc cuối");
+            txt_tenMS.requestFocus();
+            return null;
+        }
+
+        // Trim sau khi kiểm tra
+        String ma = maInput.trim();
+        String tenMS = tenMSInput.trim();
+
+        // Kiểm tra tên màu sắc rỗng
         if (tenMS.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên màu sắc");
             txt_tenMS.requestFocus();
             return null;
         }
+
+        // Kiểm tra định dạng tên màu sắc (chỉ chứa chữ cái và khoảng trống)
         if (!tenMS.matches("[\\p{L}\\s]+")) {
-            JOptionPane.showMessageDialog(this, "Tên màu sắc không được chứa số và ký tự đặc biệt");
+            JOptionPane.showMessageDialog(this, "Tên màu sắc không được chứa số hoặc ký tự đặc biệt");
+            txt_tenMS.requestFocus();
             return null;
         }
 
@@ -1518,18 +1703,52 @@ public class SanPhamView extends javax.swing.JFrame {
     }
 
     private ModelKichThuoc readFormKT() {
-        String ma = txt_maKT.getText().trim();
-        String tenKT = txt_tenKT.getText().trim();
+        // Lấy giá trị gốc để kiểm tra khoảng trống
+        String maInput = txt_maKT.getText();
+        String tenKTInput = txt_tenKT.getText();
 
+        // Kiểm tra khoảng trống ở đầu hoặc cuối
+        if (!tenKTInput.equals(tenKTInput.trim())) {
+            JOptionPane.showMessageDialog(this, "Tên kích thước không được chứa khoảng trắng ở đầu hoặc cuối");
+            txt_tenKT.requestFocus();
+            return null;
+        }
+
+        // Trim sau khi kiểm tra
+        String ma = maInput.trim();
+        String tenKT = tenKTInput.trim();
+
+        // Kiểm tra tên kích thước rỗng
         if (tenKT.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên kích thước");
             txt_tenKT.requestFocus();
             return null;
         }
-        if (!tenKT.matches("[\\p{L}0-9\s]+")) {
-            JOptionPane.showMessageDialog(this, "Tên kích thước không được chứa ký tự đặc biệt");
+
+        // Cho phép cả chữ và số, nhưng không ký tự đặc biệt
+        if (!tenKT.matches("[\\p{L}0-9\\s]+")) {
+            JOptionPane.showMessageDialog(this, "Tên kích thước chỉ được chứa chữ cái, số");
+            txt_tenKT.requestFocus();
             return null;
         }
+
+        // Nếu toàn bộ chuỗi là số thì kiểm tra giá trị
+        if (tenKT.matches("\\d+")) {
+            try {
+                int tenKTValue = Integer.parseInt(tenKT);
+                if (tenKTValue <= 2 || tenKTValue >= 60) {
+                    JOptionPane.showMessageDialog(this, "Kích thước số phải lớn hơn 2 và nhỏ hơn 60");
+                    txt_tenKT.requestFocus();
+                    return null;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Kích thước số không hợp lệ");
+                txt_tenKT.requestFocus();
+                return null;
+            }
+        }
+
+        // Nếu mã rỗng (thêm mới), tạo mã tự động
         if (ma.isEmpty()) {
             ma = generateNewMaKT();
             txt_maKT.setText(ma);
@@ -1542,11 +1761,12 @@ public class SanPhamView extends javax.swing.JFrame {
         String tenSanPham = txt_tenspct.getText().trim();
         String soLuongStr = txt_soluongspct.getText().trim();
         String donGiaStr = txt_dongiaspct.getText().trim();
-        String thuongHieu = cbo_thuongHieu.getSelectedItem().toString();
-        String mauSac = cbo_mauSac.getSelectedItem().toString();
-        String kichThuoc = cbo_kichThuoc.getSelectedItem().toString();
+        String thuongHieu = cbo_thuongHieu.getSelectedItem() != null ? cbo_thuongHieu.getSelectedItem().toString() : "";
+        String mauSac = cbo_mauSac.getSelectedItem() != null ? cbo_mauSac.getSelectedItem().toString() : "";
+        String kichThuoc = cbo_kichThuoc.getSelectedItem() != null ? cbo_kichThuoc.getSelectedItem().toString() : "";
         boolean trangThai = rdo_conban.isSelected();
 
+        // Kiểm tra tên sản phẩm
         if (tenSanPham.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên sản phẩm");
             txt_tenspct.requestFocus();
@@ -1554,8 +1774,11 @@ public class SanPhamView extends javax.swing.JFrame {
         }
         if (!tenSanPham.matches("[\\p{L}\\s]+")) {
             JOptionPane.showMessageDialog(this, "Tên sản phẩm không được chứa số hoặc ký tự đặc biệt");
+            txt_tenspct.requestFocus();
             return null;
         }
+
+        // Kiểm tra số lượng
         if (soLuongStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập số lượng");
             txt_soluongspct.requestFocus();
@@ -1581,6 +1804,7 @@ public class SanPhamView extends javax.swing.JFrame {
             return null;
         }
 
+        // Kiểm tra đơn giá
         if (donGiaStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Bạn chưa nhập đơn giá");
             txt_dongiaspct.requestFocus();
