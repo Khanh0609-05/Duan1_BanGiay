@@ -811,6 +811,9 @@ public class BanHangView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    
     private void btnHuyDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyDonActionPerformed
         // Lấy mã hóa đơn từ giao diện
         String maHoaDon = txtMaHoaDon.getText().trim();
