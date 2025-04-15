@@ -39,17 +39,13 @@ import java.text.DecimalFormat;
  */
 public class BanHangView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form BanHangVIEW
-     */
+
     private String maHoaDonHienTai = null; // Biến toàn cục để lưu mã hóa đơn hiện tại
     PhieuGiamGiaRepository pggRepo = new PhieuGiamGiaRepository();
 
     public BanHangView() {
         initComponents();
-        // Thêm renderer để định dạng cột Đơn Giá và Thành Tiền trong bảng tblHoaDonChiTiet
-        // Định dạng cột Đơn Giá
-        // Định dạng cột Đơn Giá
+
         tblHoaDonChiTiet.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
             private DecimalFormat formatter = new DecimalFormat("###,###,###");
 
@@ -450,6 +446,16 @@ public class BanHangView extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(tblSanPham);
+        if (tblSanPham.getColumnModel().getColumnCount() > 0) {
+            tblSanPham.getColumnModel().getColumn(0).setHeaderValue("STT");
+            tblSanPham.getColumnModel().getColumn(1).setHeaderValue("Mã SP");
+            tblSanPham.getColumnModel().getColumn(2).setHeaderValue("Tên SP");
+            tblSanPham.getColumnModel().getColumn(3).setHeaderValue("Thương Hiệu");
+            tblSanPham.getColumnModel().getColumn(4).setHeaderValue("Giá Bán");
+            tblSanPham.getColumnModel().getColumn(5).setHeaderValue("Số Lượng");
+            tblSanPham.getColumnModel().getColumn(6).setHeaderValue("Size");
+            tblSanPham.getColumnModel().getColumn(7).setHeaderValue("Màu Sắc");
+        }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 153, 153));

@@ -12,7 +12,7 @@ import java.sql.*;
 
 /**
  *
- * @author Vinh
+ * @author Quân
  */
 public class PhieuGiamGiaRepository {
 

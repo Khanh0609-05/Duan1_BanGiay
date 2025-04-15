@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Vinh
+ * @author Quân
  */
 public class HoaDonChiTietRepository {
 
