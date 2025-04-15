@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
+/**
+ *
+ * @author Vinh
+ */
 public class PhieuGiamGiaRepository {
 
     public List<PhieuGiamGia> getActivePhieuGiamGia() {

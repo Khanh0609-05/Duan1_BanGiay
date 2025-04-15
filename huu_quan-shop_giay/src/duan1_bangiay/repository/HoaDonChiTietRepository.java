@@ -12,7 +12,10 @@ import java.util.List;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-
+/**
+ *
+ * @author Vinh
+ */
 public class HoaDonChiTietRepository {
 
     public List<Object[]> layChiTietDonHangTuCSDL(String maDonHang) {
