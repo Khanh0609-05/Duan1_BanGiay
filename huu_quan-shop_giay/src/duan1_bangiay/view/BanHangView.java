@@ -1169,7 +1169,7 @@ public class BanHangView extends javax.swing.JFrame {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                // Refresh inventory and UI
+
                 SanPhamRepository sanPhamRepository = new SanPhamRepository();
                 sanPhamRepository.getAllSanPham();
                 loadTables();
@@ -1281,11 +1281,12 @@ public class BanHangView extends javax.swing.JFrame {
                     if (confirm != JOptionPane.YES_OPTION) {
                         return;
                     }
-
+                    
                     xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
                     capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuongHienTai);
                     capNhatChiTietHoaDon(maHoaDonHienTai);
                     capNhatTongTienChoHoaDon();
+                    
                 } else if (choice == 1) {
                     String soLuongMoiStr = JOptionPane.showInputDialog(null,
                             "Nhập số lượng mới cho sản phẩm \"" + tenHangHoa + "\":",
@@ -1307,28 +1308,36 @@ public class BanHangView extends javax.swing.JFrame {
                     }
 
                     if (soLuongMoi == 0) {
+                        // Nếu số lượng mới là 0, xóa sản phẩm
                         xoaSanPhamKhoiChiTietHoaDon(maHoaDonHienTai, tenHangHoa);
                         capNhatSoLuongSanPhamSetQuantity(idSanPham, soLuongHienTai);
                         JOptionPane.showMessageDialog(null,
                                 "Số lượng bằng 0, sản phẩm \"" + tenHangHoa + "\" đã được xóa khỏi giỏ hàng!");
                     } else {
+                        // Cập nhật số lượng trong chi tiết hóa đơn
                         capNhatSoLuongSanPhamTrongChiTietHoaDon(maHoaDonHienTai, tenHangHoa, soLuongMoi);
+
+                        // Điều chỉnh số lượng trong kho
                         int soLuongThayDoi = soLuongMoi - soLuongHienTai;
                         if (soLuongThayDoi > 0) {
+                            // Giảm số lượng trong kho
                             capNhatSoLuongSanPham(idSanPham, soLuongThayDoi);
                         } else if (soLuongThayDoi < 0) {
+                            // Tăng số lượng trong kho
                             capNhatSoLuongSanPhamSetQuantity(idSanPham, -soLuongThayDoi);
                         }
+
                     }
 
+                    // Cập nhật bảng chi tiết hóa đơn và tổng tiền
                     capNhatChiTietHoaDon(maHoaDonHienTai);
                     capNhatTongTienChoHoaDon();
                 }
 
-                // Chỉ làm mới tblSanPham
-                DefaultTableModel modelSanPham = (DefaultTableModel) tblSanPham.getModel();
+                // Làm mới danh sách sản phẩm
                 SanPhamRepository sanPhamRepository = new SanPhamRepository();
-                fillToTableSanPham(modelSanPham, sanPhamRepository.getAllSanPham());
+                sanPhamRepository.getAllSanPham();
+                loadTables();
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ! Vui lòng nhập số nguyên.");
@@ -1684,13 +1693,12 @@ public class BanHangView extends javax.swing.JFrame {
         
         
         
-        // Kiểm tra số điện thoại: chỉ kiểm tra nếu người dùng đã nhập
-        if (!soDienThoai.isEmpty()) { // Nếu có nhập số điện thoại
-            if (!soDienThoai.matches("\\d+")) { // Kiểm tra xem chỉ chứa số 0-9
-                JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa các chữ số (0-9)!");
-                return;
-            }
-        }
+        if (!soDienThoai.isEmpty()) {
+        if (!soDienThoai.matches("\\d{8,11}")) {
+        JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa các chữ số (0-9) và có độ dài từ 8 đến 11 ký tự!");
+        return;
+    }
+}
 
         try (Connection connection = DBConnect.getConnection()) {
             // Kiểm tra xem khách hàng đã tồn tại chưa, nếu chưa thì thêm mới
