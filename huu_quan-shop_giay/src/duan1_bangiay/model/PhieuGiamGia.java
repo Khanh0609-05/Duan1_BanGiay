@@ -1,23 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package duan1_bangiay.model;
 
-/**
- *
- * @author Vinh
- */
-import java.math.BigDecimal;
+import java.util.Date;
 
 public class PhieuGiamGia {
 
-    private String maPhieuGiamGia; // Voucher Code
-    private String tenPhieuGiamGia; // Voucher Name
-    private String kieuGiam; // Discount Type ('VND' or '%')
-    private BigDecimal mucGiam; // Discount Amount
+    private int id;
+    private String maPhieuGiamGia;
+    private String tenPhieuGiamGia;
+    private Date ngayBatDau; 
+    private Date ngayKetThuc; 
+    private boolean kieuGiam;
+    private double mucGiam;
+    private double mucGiamToiDa;
+    private double hoaDonToiThieu;
+    private int soLuong;
+    private int daDung;
+    private boolean trangThai;
 
-    // Getters and Setters
+    public PhieuGiamGia() {
+    }
+
+    public PhieuGiamGia(int id, String maPhieuGiamGia, String tenPhieuGiamGia, Date ngayBatDau, Date ngayKetThuc,
+            boolean kieuGiam, double mucGiam, double mucGiamToiDa, double hoaDonToiThieu,
+            int soLuong, int daDung, boolean trangThai) {
+        this.id = id;
+        this.maPhieuGiamGia = maPhieuGiamGia;
+        this.tenPhieuGiamGia = tenPhieuGiamGia;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayKetThuc = ngayKetThuc;
+        this.kieuGiam = kieuGiam;
+        this.mucGiam = mucGiam;
+        this.mucGiamToiDa = mucGiamToiDa;
+        this.hoaDonToiThieu = hoaDonToiThieu;
+        this.soLuong = soLuong;
+        this.daDung = daDung;
+        this.trangThai = trangThai;
+    }
+
+    // Getter và Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getMaPhieuGiamGia() {
         return maPhieuGiamGia;
     }
@@ -34,19 +62,75 @@ public class PhieuGiamGia {
         this.tenPhieuGiamGia = tenPhieuGiamGia;
     }
 
-    public String getKieuGiam() {
+    public Date getNgayBatDau() {
+        return ngayBatDau;
+    }
+
+    public void setNgayBatDau(Date ngayBatDau) {
+        this.ngayBatDau = ngayBatDau;
+    }
+
+    public Date getNgayKetThuc() {
+        return ngayKetThuc;
+    }
+
+    public void setNgayKetThuc(Date ngayKetThuc) {
+        this.ngayKetThuc = ngayKetThuc;
+    }
+
+    public boolean isKieuGiam() {
         return kieuGiam;
     }
 
-    public void setKieuGiam(String kieuGiam) {
+    public void setKieuGiam(boolean kieuGiam) {
         this.kieuGiam = kieuGiam;
     }
 
-    public BigDecimal getMucGiam() {
+    public double getMucGiam() {
         return mucGiam;
     }
 
-    public void setMucGiam(BigDecimal mucGiam) {
+    public void setMucGiam(double mucGiam) {
         this.mucGiam = mucGiam;
+    }
+
+    public double getMucGiamToiDa() {
+        return mucGiamToiDa;
+    }
+
+    public void setMucGiamToiDa(double mucGiamToiDa) {
+        this.mucGiamToiDa = mucGiamToiDa;
+    }
+
+    public double getHoaDonToiThieu() {
+        return hoaDonToiThieu;
+    }
+
+    public void setHoaDonToiThieu(double hoaDonToiThieu) {
+        this.hoaDonToiThieu = hoaDonToiThieu;
+    }
+
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public int getDaDung() {
+        return daDung;
+    }
+
+    public void setDaDung(int daDung) {
+        this.daDung = daDung;
+    }
+
+    public boolean isTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 }

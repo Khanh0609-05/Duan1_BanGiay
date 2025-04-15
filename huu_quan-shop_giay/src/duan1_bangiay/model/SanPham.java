@@ -5,6 +5,7 @@
 package duan1_bangiay.model;
 
 public class SanPham {
+
     private int stt;
     private String maSanPham;
     private String tenSanPham;
@@ -26,7 +27,6 @@ public class SanPham {
     }
 
     // Getters and setters (omitted for brevity)
-
     public int getStt() {
         return stt;
     }
