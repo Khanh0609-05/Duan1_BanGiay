@@ -11,7 +11,7 @@ import java.sql.*;
  *
  * @author Quân
  */
-public class HoaDonRepository {
+public class HoaDonRepo {
 
     public List<HoaDon> getHoaDonChuaThanhToan() {
         List<HoaDon> unpaidInvoices = new ArrayList<>();
@@ -73,5 +73,9 @@ public class HoaDonRepository {
         }
 
         return paidInvoices;
+    }
+
+    public void insertIntoChiTietHoaDon(String maSP, String maSP0, int soLuong, BigDecimal giaBan) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

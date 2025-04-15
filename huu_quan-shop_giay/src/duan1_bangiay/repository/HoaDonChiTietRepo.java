@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author Quân
  */
-public class HoaDonChiTietRepository {
+public class HoaDonChiTietRepo {
 
     public List<Object[]> layChiTietDonHangTuCSDL(String maDonHang) {
         List<Object[]> chiTietDonHang = new ArrayList<>();

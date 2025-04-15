@@ -6,8 +6,8 @@ package duan1_bangiay.view;
 
 import duan1_bangiay.model.HoaDon;
 import duan1_bangiay.model.PhieuGiamGia;
-import duan1_bangiay.repository.HoaDonChiTietRepository;
-import duan1_bangiay.repository.HoaDonRepository;
+import duan1_bangiay.repository.HoaDonChiTietRepo;
+import duan1_bangiay.repository.HoaDonRepo;
 import duan1_bangiay.repository.PhieuGiamGiaRepository;
 import duan1_bangiay.repository.SanPhamRepository;
 import duan1_bangiay.utils.DBConnect;
@@ -1542,7 +1542,7 @@ public class BanHangView extends javax.swing.JFrame {
         DefaultTableModel modelSanPham = (DefaultTableModel) tblSanPham.getModel();
 
         // Create repository instances
-        HoaDonRepository hoaDonRepository = new HoaDonRepository();
+        HoaDonRepo hoaDonRepository = new HoaDonRepo();
         SanPhamRepository sanPhamRepository = new SanPhamRepository();
 
         // Get data for HoaDon tables
@@ -1785,7 +1785,7 @@ public class BanHangView extends javax.swing.JFrame {
         // Calculate total price
 
         // Add product to the invoice table (model)
-        HoaDonChiTietRepository hoaDonChiTietRepository = new HoaDonChiTietRepository();
+        HoaDonChiTietRepo hoaDonChiTietRepository = new HoaDonChiTietRepo();
         hoaDonChiTietRepository.insertIntoChiTietHoaDon(maSP, maSP, soLuong, giaBan);
     }
 

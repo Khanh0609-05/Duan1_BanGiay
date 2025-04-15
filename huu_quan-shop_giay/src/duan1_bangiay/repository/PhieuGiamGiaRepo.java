@@ -14,7 +14,7 @@ import java.sql.*;
  *
  * @author Quân
  */
-public class PhieuGiamGiaRepository {
+public class PhieuGiamGiaRepo {
 
     public List<PhieuGiamGia> getActivePhieuGiamGia() {
         List<PhieuGiamGia> phieuGiamGiaList = new ArrayList<>();

@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SanPhamRepository {
+public class SanPhamRepo {
 
     public List<Object[]> getAllSanPham() {
         List<Object[]> dataList = new ArrayList<>();
