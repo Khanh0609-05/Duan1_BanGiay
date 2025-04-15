@@ -1,15 +1,15 @@
 ﻿
-IF EXISTS (SELECT * FROM sys.databases WHERE name = 'BanHangTaiQuay1')
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'BanHangTaiQuay')
 BEGIN
-    DROP DATABASE BanHangTaiQuay1
+    DROP DATABASE BanHangTaiQuay
 END
 GO
 
 
-CREATE DATABASE BanHangTaiQuay1
+CREATE DATABASE BanHangTaiQuay
 GO
 
-USE BanHangTaiQuay1
+USE BanHangTaiQuay
 GO
 
 
@@ -98,20 +98,22 @@ GO
 
 
 
-CREATE TABLE PhieuGiamGia (
+
+	CREATE TABLE PhieuGiamGia (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    MaPhieuGiamGia nvarchar(50) NULL,
-    TenPhieuGiamGia nvarchar(255) NULL,
-    kieuGiam bit NULL,
-	mucGiam decimal(18, 2) NOT NULL,
-	mucGiamToiDa decimal(18, 2) NULL,
-	hoaDonToiThieu decimal(10, 2) NOT NULL,
-	NgayBatDau date NOT NULL,
-    NgayKetThuc date NOT NULL,
-	SoLuong int NULL,
-	DaDung int NULL,
-	TrangThai bit NULL
-    
+    MaPhieuGiamGia NVARCHAR(50) NULL,
+    TenPhieuGiamGia NVARCHAR(255) NULL,
+    kieuGiam BIT NULL,
+    mucGiam DECIMAL(18, 2) NOT NULL,
+    mucGiamToiDa DECIMAL(18, 2) NULL,
+    hoaDonToiThieu DECIMAL(10, 2) NOT NULL,
+    NgayBatDau DATE NOT NULL,
+    NgayKetThuc DATE NOT NULL,
+    SoLuong INT NULL,
+    DaDung INT NULL,
+    TrangThai BIT NULL,
+    CONSTRAINT CK_PGG_Ngay CHECK (NgayBatDau < NgayKetThuc)
+
 );
 GO
 
@@ -305,25 +307,25 @@ INSERT INTO ChiTietSanPham (IDThuongHieu, IDMauSac, IDKichThuoc, SoLuong, DonGia
 GO
 INSERT INTO SanPham (MaSanPham, TenSanPham, HinhAnh, IDChiTietSanPham) VALUES
 ('SP001', N'Giày Nike Air Max', N'nike_air_max.jpg', 1),
-('SP002', N'Áo Adidas Polo', N'adidas_polo.jpg', 2),
-('SP003', N'Quần Puma Jogger', N'puma_jogger.jpg', 3),
-('SP004', N'Túi Gucci Tote', N'gucci_tote.jpg', 4),
-('SP005', N'Quần Jeans Levis', N'levis_jeans.jpg', 5),
-('SP006', N'Áo Zara Basic', N'zara_basic.jpg', 6),
-('SP007', N'Váy H&M Midi', N'hm_midi.jpg', 7),
-('SP008', N'Áo Uniqlo Flannel', N'uniqlo_flannel.jpg', 8),
+('SP002', N'Giày Adidas ', N'adidas_polo.jpg', 2),
+('SP003', N'Giày Puma ', N'puma_jogger.jpg', 3),
+('SP004', N'Giày Gucci Tote', N'gucci_tote.jpg', 4),
+('SP005', N'Giày Jeans Levis', N'levis_jeans.jpg', 5),
+('SP006', N'Giày Zara Basic', N'zara_basic.jpg', 6),
+('SP007', N'Giày H&M Midi', N'hm_midi.jpg', 7),
+('SP008', N'Giày Uniqlo Flannel', N'uniqlo_flannel.jpg', 8),
 ('SP009', N'Giày Converse Chuck', N'converse_chuck.jpg', 9),
 ('SP010', N'Giày Vans Old Skool', N'vans_oldskool.jpg', 10),
 ('SP011', N'Giày Balenciaga Triple S', N'balenciaga_triple.jpg', 11),
-('SP012', N'Áo Tommy Hilfiger', N'tommy_hilfiger.jpg', 12),
-('SP013', N'Quần Under Armour', N'under_armour.jpg', 13),
+('SP012', N'Giày Tommy Hilfiger', N'tommy_hilfiger.jpg', 12),
+('SP013', N'Giày Under Armour', N'under_armour.jpg', 13),
 ('SP014', N'Giày Reebok Classic', N'reebok_classic.jpg', 14),
 ('SP015', N'Giày New Balance 574', N'new_balance_574.jpg', 15),
 ('SP016', N'Giày Asics Gel', N'asics_gel.jpg', 16),
-('SP017', N'Áo Fila Sport', N'fila_sport.jpg', 17),
-('SP018', N'Áo Champion Hoodie', N'champion_hoodie.jpg', 18),
-('SP019', N'Áo Supreme Logo', N'supreme_logo.jpg', 19),
-('SP020', N'Áo North Face Jacket', N'north_face_jacket.jpg', 20);
+('SP017', N'Giày Fila Sport', N'fila_sport.jpg', 17),
+('SP018', N'Giày Champion ', N'champion_hoodie.jpg', 18),
+('SP019', N'Giày Supreme Logo', N'supreme_logo.jpg', 19),
+('SP020', N'Giày North Face ', N'north_face_jacket.jpg', 20);
 GO
 INSERT INTO PhieuGiamGia (MaPhieuGiamGia, TenPhieuGiamGia, kieuGiam, mucGiam, mucGiamToiDa, hoaDonToiThieu, NgayBatDau, NgayKetThuc, SoLuong, DaDung, TrangThai) VALUES
 ('PG001', N'Giảm giá mùa hè', 0, 10.00, 50.00, 200.00, '2025-04-01', '2025-06-30', 100, 20, 0),
@@ -480,4 +482,7 @@ BEGIN
     JOIN INSERTED i ON sp.ID = i.ID;
 END;
 GO
+
+
+
 
