@@ -60,7 +60,7 @@ public class SanPhamView extends javax.swing.JFrame {
         //them tim kiem
         searchListener();
         tbl_spct.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
-            private final DecimalFormat df = new DecimalFormat("#,### VĐN");
+            private final DecimalFormat df = new DecimalFormat("#,### VDN");
 
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
