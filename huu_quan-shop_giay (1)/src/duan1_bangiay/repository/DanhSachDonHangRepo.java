@@ -1,20 +1,21 @@
 package duan1_bangiay.repository;
 
-import duan1_bangiay.model.HoaDon;
+import duan1_bangiay.model.DanhSachDonHang;
 import duan1_bangiay.utils.DBConnect;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Vinh
  */
-public class HoaDonRepo {
+public class DanhSachDonHangRepo {
 
-    public List<HoaDon> getHoaDonChuaThanhToan() {
-        List<HoaDon> unpaidInvoices = new ArrayList<>();
+    public List<DanhSachDonHang> getHoaDonChuaThanhToan() {
+        List<DanhSachDonHang> unpaidInvoices = new ArrayList<>();
         String sql = "SELECT hd.MaHoaDon, kh.MaKhachHang, nv.MaNhanVien, hd.IDPhieuGiamGia, pgg.MaPhieuGiamGia, hd.NgayTao, hd.TongTien, hd.GiamGia "
                 + "FROM HoaDon hd "
                 + "JOIN KhachHang kh ON hd.IDKhachHang = kh.ID "
@@ -26,7 +27,7 @@ public class HoaDonRepo {
              PreparedStatement ps = connection.prepareStatement(sql); 
              ResultSet resultSet = ps.executeQuery()) {
             while (resultSet.next()) {
-                HoaDon hoaDon = new HoaDon();
+                DanhSachDonHang hoaDon = new DanhSachDonHang();
                 hoaDon.setMaHoaDon(resultSet.getString("MaHoaDon"));
                 hoaDon.setMaKhachHang(resultSet.getString("MaKhachHang"));
                 hoaDon.setMaNhanVien(resultSet.getString("MaNhanVien"));
@@ -44,8 +45,8 @@ public class HoaDonRepo {
         return unpaidInvoices;
     }
 
-    public List<HoaDon> getHoaDonDaThanhToan() {
-        List<HoaDon> paidInvoices = new ArrayList<>();
+    public List<DanhSachDonHang> getHoaDonDaThanhToan() {
+        List<DanhSachDonHang> paidInvoices = new ArrayList<>();
         String sql = "SELECT hd.MaHoaDon, kh.MaKhachHang, nv.MaNhanVien, hd.IDPhieuGiamGia, pgg.MaPhieuGiamGia, hd.NgayTao, hd.TongTien, hd.GiamGia "
                 + "FROM HoaDon hd "
                 + "JOIN KhachHang kh ON hd.IDKhachHang = kh.ID "
@@ -57,7 +58,7 @@ public class HoaDonRepo {
              PreparedStatement ps = connection.prepareStatement(sql); 
              ResultSet resultSet = ps.executeQuery()) {
             while (resultSet.next()) {
-                HoaDon hoaDon = new HoaDon();
+                DanhSachDonHang hoaDon = new DanhSachDonHang();
                 hoaDon.setMaHoaDon(resultSet.getString("MaHoaDon"));
                 hoaDon.setMaKhachHang(resultSet.getString("MaKhachHang"));
                 hoaDon.setMaNhanVien(resultSet.getString("MaNhanVien"));
@@ -73,5 +74,25 @@ public class HoaDonRepo {
         }
 
         return paidInvoices;
+    }
+        public boolean kiemTraTrangThaiHoaDon(String maHoaDonHienTai) {
+        try {
+            Connection conn = DBConnect.getConnection();
+            String sql = "SELECT trangThai FROM HoaDon WHERE maHoaDon = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, maHoaDonHienTai);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int trangThai = rs.getInt("trangThai");
+                return trangThai == 1; // Trả về true nếu trạng thái là 1 (đã thanh toán)
+            }
+
+            return false; // Mặc định trả về false nếu không tìm thấy hóa đơn
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi kiểm tra trạng thái hóa đơn: " + e.getMessage());
+            return true; // Ngăn hành động nếu có lỗi
+        }
     }
 }

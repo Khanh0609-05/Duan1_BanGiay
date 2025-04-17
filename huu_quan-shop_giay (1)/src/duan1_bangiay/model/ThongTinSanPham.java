@@ -4,7 +4,7 @@
  */
 package duan1_bangiay.model;
 
-public class SanPham {
+public class ThongTinSanPham {
 
     private int stt;
     private String maSanPham;
@@ -15,7 +15,7 @@ public class SanPham {
     private String size;
     private String mauSac;
 
-    public SanPham(int stt, String maSanPham, String tenSanPham, String thuongHieu, double giaBan, int soLuong, String size, String mauSac) {
+    public ThongTinSanPham(int stt, String maSanPham, String tenSanPham, String thuongHieu, double giaBan, int soLuong, String size, String mauSac) {
         this.stt = stt;
         this.maSanPham = maSanPham;
         this.tenSanPham = tenSanPham;

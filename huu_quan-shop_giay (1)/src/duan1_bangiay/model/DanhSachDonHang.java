@@ -3,7 +3,7 @@ package duan1_bangiay.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class HoaDon {
+public class DanhSachDonHang {
     private String maHoaDon;
     private String maKhachHang;
     private String maNhanVien;

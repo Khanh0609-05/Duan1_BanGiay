@@ -6,7 +6,7 @@ package duan1_bangiay.model;
 
 import java.math.BigDecimal;
 
-public class ChiTietHoaDon {
+public class GioHang {
 
     private int id; // Primary key
     private int idSanPham; // Foreign key
@@ -16,10 +16,10 @@ public class ChiTietHoaDon {
     private boolean trangThai; // Status (active/inactive)
 
     // Constructors
-    public ChiTietHoaDon() {
+    public GioHang() {
     }
 
-    public ChiTietHoaDon(int id, int idSanPham, int idHoaDon, int soLuong, BigDecimal donGia, boolean trangThai) {
+    public GioHang(int id, int idSanPham, int idHoaDon, int soLuong, BigDecimal donGia, boolean trangThai) {
         this.id = id;
         this.idSanPham = idSanPham;
         this.idHoaDon = idHoaDon;
