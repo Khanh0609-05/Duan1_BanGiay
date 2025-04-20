@@ -981,8 +981,6 @@ public class SanPhamView extends javax.swing.JFrame {
                 return;
             }
 
-            
-
             // Validate số lượng
             if (soLuongStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Bạn chưa nhập số lượng");
@@ -1017,14 +1015,20 @@ public class SanPhamView extends javax.swing.JFrame {
             BigDecimal donGia;
             try {
                 String donGiaStrCleaned = donGiaStr.replace(",", "");
+                // Check for decimal point
+                if (donGiaStrCleaned.contains(".")) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được chứa dấu chấm (.)");
+                    txt_dongiaspct.requestFocus();
+                    return;
+                }
                 donGia = new BigDecimal(donGiaStrCleaned);
-                if (donGia.compareTo(new BigDecimal("49999")) <= 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá phải từ 50,000 VND trở lên");
+                if (donGia.compareTo(new BigDecimal("1000")) <= 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá phải lớn hơn 1,000 VND");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
                 if (donGia.compareTo(new BigDecimal("10000000")) > 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000 VND");
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
@@ -1239,14 +1243,20 @@ public class SanPhamView extends javax.swing.JFrame {
             BigDecimal donGia;
             try {
                 String donGiaStrCleaned = donGiaStr.replace(",", "");
+                // Check for decimal point
+                if (donGiaStrCleaned.contains(".")) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được chứa dấu chấm (.)");
+                    txt_dongiaspct.requestFocus();
+                    return;
+                }
                 donGia = new BigDecimal(donGiaStrCleaned);
-                if (donGia.compareTo(new BigDecimal("49999")) <= 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá phải từ 50,000 VND trở lên");
+                if (donGia.compareTo(new BigDecimal("1000")) <= 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá phải lớn hơn 1,000 VND");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
                 if (donGia.compareTo(new BigDecimal("10000000")) > 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000 VND");
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
