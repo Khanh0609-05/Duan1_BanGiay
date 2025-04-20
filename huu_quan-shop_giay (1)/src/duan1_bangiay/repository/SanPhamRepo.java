@@ -1,102 +1,163 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package duan1_bangiay.repository;
 
-import duan1_bangiay.model.SanPham;
+import duan1_bangiay.model.SanPhamModel;
 import duan1_bangiay.utils.DBConnect;
+
+
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+import javax.swing.JOptionPane;
 
 public class SanPhamRepo {
-
-    public List<Object[]> getAllSanPham() {
-        List<Object[]> dataList = new ArrayList<>();
-        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY sp.ID) AS STT, "
-                + "sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, "
-                + "ctp.DonGia AS GiaBan, ctp.SoLuong, kt.TenKT AS Size, ms.TenMS AS MauSac "
-                + "FROM SanPham sp "
-                + "JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID "
-                + "JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID "
-                + "JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID "
-                + "JOIN MauSac ms ON ctp.IDMauSac = ms.ID";
-
-        try (Connection connection = DBConnect.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet rs = preparedStatement.executeQuery();
+    private Connection con = null;
+    private PreparedStatement ps = null;
+    private ResultSet rs = null;
+    private String sql = null;
+    
+    public ArrayList<SanPhamModel> getall(){
+        ArrayList<SanPhamModel> List_sanpham = new ArrayList();
+        
+        sql="SELECT ID_SanPham, Ma, Ten, MoTa, GiaBan, ID_ThuongHieu, TrangThai FROM SanPham";
+        try{
+            con = DBConnect.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
             while (rs.next()) {
-                Object[] row = new Object[]{
-                    rs.getInt("STT"),
-                    rs.getString("MaSanPham"),
-                    rs.getString("TenSanPham"),
-                    rs.getString("ThuongHieu"),
-                    rs.getBigDecimal("GiaBan"),
-                    rs.getInt("SoLuong"),
-                    rs.getString("Size"),
-                    rs.getString("MauSac")
-                };
-                dataList.add(row);
+                int id = rs.getInt(1);
+                String ma = rs.getString(2);
+                String ten = rs.getString(3);
+                String moTa = rs.getString(4);
+                double giaBan = rs.getDouble(5);
+                int idThuongHieu = rs.getInt(6);
+                boolean trangThai = rs.getBoolean(7);
+
+                SanPhamModel sanPham = new SanPhamModel(id, ma, ten, moTa, giaBan, idThuongHieu, trangThai);
+                List_sanpham.add(sanPham);
             }
+            return List_sanpham;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+    public int themSP(SanPhamModel m) {
+            sql = "INSERT INTO SanPham (Ma, Ten, MoTa, GiaBan, ID_ThuongHieu, TrangThai) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            con = DBConnect.getConnection();
+            ps = con.prepareStatement(sql);
+            
+            ps.setString(1, m.getMa());
+            ps.setString(2, m.getTen());
+            ps.setString(3, m.getMoTa());
+            ps.setDouble(4, m.getGiaBan());
+            ps.setInt(5, m.getIdThuongHieu());
+            ps.setBoolean(6, m.isTrangThai());
+            
+            return ps.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
+            return 0;
+
         }
 
-        return dataList;
     }
-
-public List<Object[]> searchSanPham(String keyword) {
-    List<Object[]> searchResults = new ArrayList<>();
-    String sql = "SELECT ROW_NUMBER() OVER (ORDER BY sp.ID) AS STT, "
-            + "sp.MaSanPham, sp.TenSanPham, th.TenTH AS ThuongHieu, "
-            + "ctp.DonGia AS GiaBan, ctp.SoLuong, kt.TenKT AS Size, ms.TenMS AS MauSac "
-            + "FROM SanPham sp "
-            + "JOIN ChiTietSanPham ctp ON sp.IDChiTietSanPham = ctp.ID "
-            + "JOIN ThuongHieu th ON ctp.IDThuongHieu = th.ID "
-            + "JOIN KichThuoc kt ON ctp.IDKichThuoc = kt.ID "
-            + "JOIN MauSac ms ON ctp.IDMauSac = ms.ID "
-            + "WHERE sp.MaSanPham LIKE ? "
-            + "OR sp.TenSanPham LIKE ? "
-            + "OR th.TenTH LIKE ? "
-            + "OR CAST(ctp.DonGia AS NVARCHAR(50)) LIKE ? "
-            + "OR CAST(ctp.SoLuong AS NVARCHAR(50)) LIKE ? "
-            + "OR kt.TenKT LIKE ? "
-            + "OR ms.TenMS LIKE ?";
-
-    try (Connection connection = DBConnect.getConnection(); 
-         PreparedStatement ps = connection.prepareStatement(sql)) {
-
-        // Use wildcard to perform partial matches for all fields
-        String searchPattern = "%" + keyword + "%";
-        ps.setString(1, searchPattern); // MaSanPham
-        ps.setString(2, searchPattern); // TenSanPham
-        ps.setString(3, searchPattern); // ThuongHieu
-        ps.setString(4, searchPattern); // GiaBan (DonGia)
-        ps.setString(5, searchPattern); // SoLuong
-        ps.setString(6, searchPattern); // Size (TenKT)
-        ps.setString(7, searchPattern); // MauSac (TenMS)
-
-        ResultSet rs = ps.executeQuery();
-
+    public int suaSP(int id, SanPhamModel m) {
+        sql = "UPDATE SanPham SET Ma=?, Ten=?, MoTa=?, GiaBan=?, ID_ThuongHieu=?, TrangThai=? WHERE ID_SanPham=?";
+        try {
+            con = DBConnect.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, m.getMa());
+            ps.setString(2, m.getTen());
+            ps.setString(3, m.getMoTa());
+            ps.setDouble(4, m.getGiaBan());
+            ps.setInt(5, m.getIdThuongHieu());
+            ps.setBoolean(6, m.isTrangThai());
+            ps.setInt(7, id);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        } 
+    }
+    public SanPhamModel checkTrungSP(String maMoi) {
+    sql = "SELECT ID_SanPham, Ma, Ten, MoTa, GiaBan, ID_ThuongHieu, TrangThai FROM SanPham WHERE Ma = ?";
+    
+    SanPhamModel sanPham = null;
+    
+    try {
+        con = DBConnect.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, maMoi);
+        rs = ps.executeQuery();
+        
         while (rs.next()) {
-            Object[] row = new Object[]{
-                rs.getInt("STT"),           // Serial Number
-                rs.getString("MaSanPham"),  // Product Code
-                rs.getString("TenSanPham"), // Product Name
-                rs.getString("ThuongHieu"), // Brand
-                rs.getBigDecimal("GiaBan"), // Price
-                rs.getInt("SoLuong"),       // Quantity
-                rs.getString("Size"),       // Size
-                rs.getString("MauSac")      // Color
-            };
-            searchResults.add(row);
+            
+            int id = rs.getInt(1);
+            String ma = rs.getString(2);
+            String ten = rs.getString(3);
+            String moTa = rs.getString(4);
+            double giaBan = rs.getDouble(5);
+            int idThuongHieu = rs.getInt(6);
+            boolean trangThai = rs.getBoolean(7);
+            
+            sanPham = new SanPhamModel(id, ma, ten, moTa, giaBan, idThuongHieu, trangThai);
         }
-
-    } catch (SQLException e) {
+        return sanPham; 
+    } catch (Exception e) {
         e.printStackTrace();
+        return null;
+    } 
     }
-
-    return searchResults;
+    
+    
+    public int xoaSP(int id) {
+    sql = "DELETE FROM SanPham WHERE ID_SanPham = ?";
+    try {
+        con = DBConnect.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        return ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return 0;
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
+        public int timSdtKhachHang(String soDienThoai) throws SQLException {
+        String sql = "SELECT ID FROM KhachHang WHERE SDT = ?";
+        try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, soDienThoai);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("ID");
+            }
+        }
+        return -1; // Return invalid ID if customer doesn't exist
+    }
+            public boolean kiemTraSpTrongHoaDon(String maHoaDon, String maSP) {
+        String sql = "SELECT COUNT(*) FROM ChiTietHoaDon WHERE IDHoaDon = (SELECT ID FROM HoaDon WHERE MaHoaDon = ?) AND IDSanPham = (SELECT ID FROM SanPham WHERE MaSanPham = ?)";
+        try (Connection connection = DBConnect.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, maHoaDon);
+            ps.setString(2, maSP);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi kiểm tra sản phẩm: " + e.getMessage());
+        }
+        return false;
+    }
 }
