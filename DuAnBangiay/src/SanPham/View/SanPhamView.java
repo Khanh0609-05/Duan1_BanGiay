@@ -981,22 +981,7 @@ public class SanPhamView extends javax.swing.JFrame {
                 return;
             }
 
-            // Validate các combo box
-            if (thuongHieu.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Bạn chưa chọn thương hiệu");
-                cbo_thuongHieu.requestFocus();
-                return;
-            }
-            if (mauSac.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Bạn chưa chọn màu sắc");
-                cbo_mauSac.requestFocus();
-                return;
-            }
-            if (kichThuoc.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Bạn chưa chọn kích thước");
-                cbo_kichThuoc.requestFocus();
-                return;
-            }
+            
 
             // Validate số lượng
             if (soLuongStr.isEmpty()) {
@@ -1033,13 +1018,13 @@ public class SanPhamView extends javax.swing.JFrame {
             try {
                 String donGiaStrCleaned = donGiaStr.replace(",", "");
                 donGia = new BigDecimal(donGiaStrCleaned);
-                if (donGia.compareTo(BigDecimal.ZERO) <= 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá phải lớn hơn 0");
+                if (donGia.compareTo(new BigDecimal("49999")) <= 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá phải từ 50,000 VND trở lên");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
                 if (donGia.compareTo(new BigDecimal("10000000")) > 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000");
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000 VND");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
@@ -1255,18 +1240,18 @@ public class SanPhamView extends javax.swing.JFrame {
             try {
                 String donGiaStrCleaned = donGiaStr.replace(",", "");
                 donGia = new BigDecimal(donGiaStrCleaned);
-                if (donGia.compareTo(BigDecimal.ZERO) < 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá không được âm");
+                if (donGia.compareTo(new BigDecimal("49999")) <= 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá phải từ 50,000 VND trở lên");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
-                if (donGia.compareTo(new BigDecimal("9999999")) > 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 9,999,999");
+                if (donGia.compareTo(new BigDecimal("10000000")) > 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn giá không được vượt quá 10,000,000 VND");
                     txt_dongiaspct.requestFocus();
                     return;
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Đơn giá phải là số hợp lệ");
+                JOptionPane.showMessageDialog(this, "Đơn giá không được chứa chữ hoặc ký tự đặc biệt");
                 txt_dongiaspct.requestFocus();
                 return;
             }
@@ -1724,71 +1709,71 @@ public class SanPhamView extends javax.swing.JFrame {
     }
 
     private ModelKichThuoc readFormKT() {
-    // Lấy giá trị gốc để kiểm tra khoảng trống
-    String maInput = txt_maKT.getText();
-    String tenKTInput = txt_tenKT.getText();
+        // Lấy giá trị gốc để kiểm tra khoảng trống
+        String maInput = txt_maKT.getText();
+        String tenKTInput = txt_tenKT.getText();
 
-    // Kiểm tra khoảng trống ở đầu hoặc cuối
-    if (!maInput.equals(maInput.trim())) {
-        JOptionPane.showMessageDialog(this, "Mã kích thước không được chứa khoảng trắng ở đầu hoặc cuối");
-        txt_maKT.requestFocus();
-        return null;
-    }
-    if (!tenKTInput.equals(tenKTInput.trim())) {
-        JOptionPane.showMessageDialog(this, "Tên kích thước không được chứa khoảng trắng ở đầu hoặc cuối");
-        txt_tenKT.requestFocus();
-        return null;
-    }
-
-    // Trim sau khi kiểm tra
-    String ma = maInput.trim();
-    String tenKT = tenKTInput.trim();
-
-    // Kiểm tra tên kích thước rỗng
-    if (tenKT.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên kích thước");
-        txt_tenKT.requestFocus();
-        return null;
-    }
-
-    // Cho phép chữ cái, số, khoảng trắng và dấu phẩy
-    if (!tenKT.matches("[\\p{L}0-9\\s,]+")) {
-        JOptionPane.showMessageDialog(this, "Tên kích thước chỉ được chứa chữ cái, số, khoảng trắng và dấu phẩy");
-        txt_tenKT.requestFocus();
-        return null;
-    }
-
-    // Kiểm tra nếu tenKT là số (số nguyên hoặc số thập phân với dấu phẩy)
-    if (tenKT.matches("\\d+([,]\\d+)?")) {
-        try {
-            // Thay dấu phẩy thành dấu chấm để parse
-            String tenKTNumber = tenKT.replace(",", ".");
-            double tenKTValue = Double.parseDouble(tenKTNumber);
-            if (tenKTValue == 0) {
-                JOptionPane.showMessageDialog(this, "Kích thước không được bằng 0");
-                txt_tenKT.requestFocus();
-                return null;
-            }
-            if (tenKTValue <= 2 || tenKTValue >= 60) {
-                JOptionPane.showMessageDialog(this, "Kích thước số phải lớn hơn 2 và nhỏ hơn 60");
-                txt_tenKT.requestFocus();
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Kích thước số không hợp lệ");
+        // Kiểm tra khoảng trống ở đầu hoặc cuối
+        if (!maInput.equals(maInput.trim())) {
+            JOptionPane.showMessageDialog(this, "Mã kích thước không được chứa khoảng trắng ở đầu hoặc cuối");
+            txt_maKT.requestFocus();
+            return null;
+        }
+        if (!tenKTInput.equals(tenKTInput.trim())) {
+            JOptionPane.showMessageDialog(this, "Tên kích thước không được chứa khoảng trắng ở đầu hoặc cuối");
             txt_tenKT.requestFocus();
             return null;
         }
-    }
 
-    // Nếu mã rỗng (khi thêm mới), sinh mã tự động
-    if (ma.isEmpty()) {
-        ma = generateNewMaKT();
-        txt_maKT.setText(ma);
-    }
+        // Trim sau khi kiểm tra
+        String ma = maInput.trim();
+        String tenKT = tenKTInput.trim();
 
-    return new ModelKichThuoc(ma, tenKT);
-}
+        // Kiểm tra tên kích thước rỗng
+        if (tenKT.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên kích thước");
+            txt_tenKT.requestFocus();
+            return null;
+        }
+
+        // Cho phép chữ cái, số, khoảng trắng và dấu phẩy
+        if (!tenKT.matches("[\\p{L}0-9\\s,]+")) {
+            JOptionPane.showMessageDialog(this, "Tên kích thước chỉ được chứa chữ cái, số, khoảng trắng và dấu phẩy");
+            txt_tenKT.requestFocus();
+            return null;
+        }
+
+        // Kiểm tra nếu tenKT là số (số nguyên hoặc số thập phân với dấu phẩy)
+        if (tenKT.matches("\\d+([,]\\d+)?")) {
+            try {
+                // Thay dấu phẩy thành dấu chấm để parse
+                String tenKTNumber = tenKT.replace(",", ".");
+                double tenKTValue = Double.parseDouble(tenKTNumber);
+                if (tenKTValue == 0) {
+                    JOptionPane.showMessageDialog(this, "Kích thước không được bằng 0");
+                    txt_tenKT.requestFocus();
+                    return null;
+                }
+                if (tenKTValue <= 2 || tenKTValue >= 60) {
+                    JOptionPane.showMessageDialog(this, "Kích thước số phải lớn hơn 2 và nhỏ hơn 60");
+                    txt_tenKT.requestFocus();
+                    return null;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Kích thước số không hợp lệ");
+                txt_tenKT.requestFocus();
+                return null;
+            }
+        }
+
+        // Nếu mã rỗng (khi thêm mới), sinh mã tự động
+        if (ma.isEmpty()) {
+            ma = generateNewMaKT();
+            txt_maKT.setText(ma);
+        }
+
+        return new ModelKichThuoc(ma, tenKT);
+    }
 
     private SanPhamChiTietModel readFormSPCT() {
         String tenSanPham = txt_tenspct.getText().trim();
